@@ -2,7 +2,7 @@ package = "cairo"
 version = "scm-1"
 
 source = {
-   url = "git://github.com/andresy/cairo-ffi.git"
+   url = "git://github.com/torch/cairo-ffi.git"
 }
 
 description = {
@@ -10,7 +10,7 @@ description = {
    detailed = [[
    See http://cairographics.org for more details.
    ]],
-   homepage = "https://github.com/andresy/cairo-ffi",
+   homepage = "https://github.com/torch/cairo-ffi",
    license = "BSD"
 }
 
