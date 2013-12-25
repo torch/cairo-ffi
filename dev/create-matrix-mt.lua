@@ -8,10 +8,11 @@ local matrix_mt = {__index={}}
 
 local function cairo_create_matrix_mt(cairo)
 
-   local function register(funcname)
+   local function register(funcname, prefix)
+      local prefix = prefix or 'cairo_matrix_'
 
       local status, sym = pcall(function()
-                                   return cairo.C['cairo_matrix_' .. funcname]
+                                   return cairo.C[prefix .. funcname]
                                 end)
 
       if status then
