@@ -5,12 +5,24 @@ local ffi = require 'ffi'
 
 local pattern_mt = {__index={}}
 
-local function pattern_create_mt(cairo)
+local function cairo_create_pattern_mt(cairo)
 
-   local function register(funcname)
-      pattern_mt.__index[funcname] = cairo['pattern_' .. funcname]
+   local function register(funcname, prefix)
+      prefix = prefix or 'cairo_pattern_'
+
+      local status, sym = pcall(function()
+                                   return cairo.C[prefix .. funcname]
+                                end)
+
+      if status then
+         pattern_mt.__index[funcname] = sym
+         return true
+      end
+
+      print('warning: method not found: ', prefix .. funcname, sym)
+
+      return false
    end
-
 
   register('reference')
   register('destroy')
@@ -69,6 +81,6 @@ local function pattern_create_mt(cairo)
 
 end
 
-return pattern_create_mt
+return cairo_create_pattern_mt
 
 
