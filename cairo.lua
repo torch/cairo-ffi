@@ -7,10 +7,21 @@ local cairo_mt = {__index={}}
 
 local function cairo_create_mt(cairo)
 
-   local function register(funcname)
-      cairo_mt.__index[funcname] = cairo[funcname]
-   end
+   local function register(funcname, prefix)
+      prefix = prefix or 'cairo_'
 
+      local status, sym = pcall(function()
+                                   return cairo.C[prefix .. funcname]
+                                end)
+      if status then
+         cairo_mt.__index[funcname] = sym
+         return true
+      end
+
+      print('warning: method not found: ', prefix .. funcname, sym)
+
+      return false
+   end
 
   register('reference')
   register('destroy')
