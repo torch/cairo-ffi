@@ -5,12 +5,23 @@ local ffi = require 'ffi'
 
 local matrix_mt = {__index={}}
 
-local function matrix_create_mt(cairo)
+local function cairo_create_matrix_mt(cairo)
 
    local function register(funcname)
-      matrix_mt.__index[funcname] = cairo['matrix_' .. funcname]
-   end
 
+      local status, sym = pcall(function()
+                                   return cairo.C['cairo_matrix_' .. funcname]
+                                end)
+
+      if status then
+         matrix_mt.__index[funcname] = sym
+         return true
+      end
+
+      print('warning: method not found: ', prefix .. funcname, sym)
+
+      return false
+   end
 
   register('init')
   register('init_identity')
@@ -52,6 +63,6 @@ local function matrix_create_mt(cairo)
 
 end
 
-return matrix_create_mt
+return cairo_create_matrix_mt
 
 
