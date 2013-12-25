@@ -6,7 +6,7 @@ local ffi = require 'ffi'
 
 local surface_mt = {__index={}}
 
-local function surface_create_mt(cairo)
+local function cairo_create_surface_mt(cairo)
 
    local function register(funcname)
       surface_mt.__index[funcname] = cairo['surface_' .. funcname]
@@ -48,6 +48,6 @@ print[[
 
 end
 
-return surface_create_mt
+return cairo_create_surface_mt
 
 ]]

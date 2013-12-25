@@ -6,7 +6,7 @@ local ffi = require 'ffi'
 
 local pattern_mt = {__index={}}
 
-local function pattern_create_mt(cairo)
+local function cairo_create_pattern_mt(cairo)
 
    local function register(funcname)
       pattern_mt.__index[funcname] = cairo['pattern_' .. funcname]
@@ -49,6 +49,6 @@ print[[
 
 end
 
-return pattern_create_mt
+return cairo_create_pattern_mt
 
 ]]

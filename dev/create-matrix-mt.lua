@@ -6,7 +6,7 @@ local ffi = require 'ffi'
 
 local matrix_mt = {__index={}}
 
-local function matrix_create_mt(cairo)
+local function cairo_create_matrix_mt(cairo)
 
    local function register(funcname)
       matrix_mt.__index[funcname] = cairo['matrix_' .. funcname]
@@ -43,6 +43,6 @@ print[[
 
 end
 
-return matrix_create_mt
+return cairo_create_matrix_mt
 
 ]]
