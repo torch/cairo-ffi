@@ -8,10 +8,10 @@ local surface_mt = {__index={}}
 local function cairo_create_surface_mt(cairo)
 
    local function register(funcname, prefix)
-      prefix = prefix or 'surface_'
+      prefix = prefix or 'cairo_surface_'
 
       local status, sym = pcall(function()
-                                   return cairo.C['cairo_' .. prefix .. funcname]
+                                   return cairo.C[prefix .. funcname]
                                 end)
       if status then
          surface_mt.__index[funcname] = sym
@@ -65,11 +65,11 @@ local function cairo_create_surface_mt(cairo)
   register('show_page')
   register('has_show_text_glyphs')
 
-  register('get_data', 'image_surface_')
-  register('get_format', 'image_surface_')
-  register('get_width', 'image_surface_')
-  register('get_height', 'image_surface_')
-  register('get_stride', 'image_surface_')
+  register('get_data', 'cairo_image_surface_')
+  register('get_format', 'cairo_image_surface_')
+  register('get_width', 'cairo_image_surface_')
+  register('get_height', 'cairo_image_surface_')
+  register('get_stride', 'cairo_image_surface_')
 
   function cairo.surface_create_similar(...)
      local surf = cairo.C.cairo_surface_create_similar(...)

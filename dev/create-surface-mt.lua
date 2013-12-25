@@ -9,10 +9,10 @@ local surface_mt = {__index={}}
 local function cairo_create_surface_mt(cairo)
 
    local function register(funcname, prefix)
-      prefix = prefix or 'surface_'
+      prefix = prefix or 'cairo_surface_'
 
       local status, sym = pcall(function()
-                                   return cairo.C['cairo_' .. prefix .. funcname]
+                                   return cairo.C[prefix .. funcname]
                                 end)
       if status then
          surface_mt.__index[funcname] = sym
@@ -39,7 +39,7 @@ print()
 
 for funcname in txt:gmatch('cairo_image_surface_([^%=,%.%;<%s%(%)]+)%s*%(%s*cairo_surface_t%s') do
    if funcname and not defined[funcname] then
-      print(string.format("  register('%s', 'image_surface_')", funcname))
+      print(string.format("  register('%s', 'cairo_image_surface_')", funcname))
       defined[funcname] = true
    end
 end
