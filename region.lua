@@ -5,12 +5,23 @@ local ffi = require 'ffi'
 
 local region_mt = {__index={}}
 
-local function region_create_mt(cairo)
+local function cairo_create_region_mt(cairo)
 
-   local function register(funcname)
-      region_mt.__index[funcname] = cairo['region_' .. funcname]
+   local function register(funcname, prefix)
+      prefix = prefix or 'cairo_region_'
+
+      local status, sym = pcall(function()
+                                   return cairo.C[prefix .. funcname]
+                                end)
+      if status then
+         region_mt.__index[funcname] = sym
+         return true
+      end
+
+      print('warning: method not found: ', prefix .. funcname, sym)
+
+      return false
    end
-
 
   register('reference')
   register('destroy')
@@ -53,6 +64,6 @@ local function region_create_mt(cairo)
 
 end
 
-return region_create_mt
+return cairo_create_region_mt
 
 

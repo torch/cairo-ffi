@@ -8,10 +8,21 @@ local region_mt = {__index={}}
 
 local function cairo_create_region_mt(cairo)
 
-   local function register(funcname)
-      region_mt.__index[funcname] = cairo['region_' .. funcname]
-   end
+   local function register(funcname, prefix)
+      prefix = prefix or 'cairo_region_'
 
+      local status, sym = pcall(function()
+                                   return cairo.C[prefix .. funcname]
+                                end)
+      if status then
+         region_mt.__index[funcname] = sym
+         return true
+      end
+
+      print('warning: method not found: ', prefix .. funcname, sym)
+
+      return false
+   end
 ]]
 
 local defined = {}
