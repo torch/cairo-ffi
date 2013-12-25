@@ -28,6 +28,7 @@ build = {
       ["cairo.cairo"] = "cairo.lua",
       ["cairo.surface"] = "surface.lua",
       ["cairo.pattern"] = "pattern.lua",
-      ["cairo.region"] = "region.lua"
+      ["cairo.region"] = "region.lua",
+      ["cairo.matrix"] = "matrix.lua"
    }      
 }
