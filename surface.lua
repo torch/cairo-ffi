@@ -7,10 +7,21 @@ local surface_mt = {__index={}}
 
 local function cairo_create_surface_mt(cairo)
 
-   local function register(funcname)
-      surface_mt.__index[funcname] = cairo['surface_' .. funcname]
-   end
+   local function register(funcname, prefix)
+      prefix = prefix or 'surface_'
 
+      local status, sym = pcall(function()
+                                   return cairo.C['cairo_' .. prefix .. funcname]
+                                end)
+      if status then
+         surface_mt.__index[funcname] = sym
+         return true
+      end
+
+      print('warning: method not found: ', prefix .. funcname, sym)
+
+      return false
+   end
 
   register('create_similar')
   register('create_similar_image')
@@ -53,6 +64,12 @@ local function cairo_create_surface_mt(cairo)
   register('copy_page')
   register('show_page')
   register('has_show_text_glyphs')
+
+  register('get_data', 'image_surface_')
+  register('get_format', 'image_surface_')
+  register('get_width', 'image_surface_')
+  register('get_height', 'image_surface_')
+  register('get_stride', 'image_surface_')
 
   function cairo.surface_create_similar(...)
      local surf = cairo.C.cairo_surface_create_similar(...)

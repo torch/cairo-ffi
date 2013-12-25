@@ -8,10 +8,21 @@ local surface_mt = {__index={}}
 
 local function cairo_create_surface_mt(cairo)
 
-   local function register(funcname)
-      surface_mt.__index[funcname] = cairo['surface_' .. funcname]
-   end
+   local function register(funcname, prefix)
+      prefix = prefix or 'surface_'
 
+      local status, sym = pcall(function()
+                                   return cairo.C['cairo_' .. prefix .. funcname]
+                                end)
+      if status then
+         surface_mt.__index[funcname] = sym
+         return true
+      end
+
+      print('warning: method not found: ', prefix .. funcname, sym)
+
+      return false
+   end
 ]]
 
 local defined = {}
@@ -20,6 +31,15 @@ local txt = io.open('cdefs.lua'):read('*all')
 for funcname in txt:gmatch('cairo_surface_([^%=,%.%;<%s%(%)]+)%s*%(%s*cairo_surface_t%s') do
    if funcname and not defined[funcname] then
       print(string.format("  register('%s')", funcname))
+      defined[funcname] = true
+   end
+end
+
+print()
+
+for funcname in txt:gmatch('cairo_image_surface_([^%=,%.%;<%s%(%)]+)%s*%(%s*cairo_surface_t%s') do
+   if funcname and not defined[funcname] then
+      print(string.format("  register('%s', 'image_surface_')", funcname))
       defined[funcname] = true
    end
 end
