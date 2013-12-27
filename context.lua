@@ -247,20 +247,18 @@ Context.rotate =
 Context.transform =
    argcheck(
    {{name="self", type="cairo.Context"},
-    {name="matrix", type="table"}},
+    {name="matrix", type="cairo.Matrix"}},
    function(self, matrix)
-      matrix = ffi.new('cairo_matrix_t', matrix)
-      cairo.C.cairo_transform(self.C, matrix)
+      cairo.C.cairo_transform(self.C, matrix.C)
    end
 )
 
 Context.setMatrix =
    argcheck(
    {{name="self", type="cairo.Context"},
-    {name="matrix", type="table"}},
+    {name="matrix", type="cairo.Matrix"}},
    function(self, matrix)
-      matrix = ffi.new('cairo_matrix_t', matrix)
-      cairo.C.cairo_set_matrix(self.C, matrix)
+      cairo.C.cairo_set_matrix(self.C, matrix.C)
    end
 )
 
@@ -678,10 +676,9 @@ Context.setFontSize =
 Context.setFontMatrix =
    argcheck(
    {{name="self", type="cairo.Context"},
-    {name="matrix", type="table"}},
+    {name="matrix", type="cairo.Matrix"}},
    function(self, matrix)
-      matrix = ffi.new('cairo_matrix_t', matrix)
-      cairo.C.cairo_set_font_matrix(self.C, matrix)
+      cairo.C.cairo_set_font_matrix(self.C, matrix.C)
    end
 )
 
@@ -689,9 +686,9 @@ Context.getFontMatrix =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      local matrix = ffi.new('cairo_matrix_t')
-      cairo.C.cairo_get_font_matrix(self.C, matrix)
-      return {xx=matrix.xx, yx=matrix.yx, yy=matrix.xy, yy=matrix.yy, x0=matrix.x0, y0=matrix.y0}
+      local matrix = cairo.Matrix()
+      cairo.C.cairo_get_font_matrix(self.C, matrix.C)
+      return matrix
    end
 )
 
@@ -964,9 +961,9 @@ Context.getMatrix =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      local matrix = ffi.new('cairo_matrix_t')
-      cairo.C.cairo_get_matrix(self.C, matrix)
-      return {xx=matrix.xx, yx=matrix.yx, yy=matrix.xy, yy=matrix.yy, x0=matrix.x0, y0=matrix.y0}
+      local matrix = cairo.Matrix
+      cairo.C.cairo_get_matrix(self.C, matrix.C)
+      return matrix
    end
 )
 

@@ -9,20 +9,19 @@ local Pattern = class.new('cairo.Pattern')
 Pattern.setMatrix =
    argcheck(
    {{name="self", type="cairo.Pattern"},
-    {name="matrix", type="table"}},
+    {name="matrix", type="cairo.Matrix"}},
    function(self, matrix)
-      matrix = ffi.new('cairo_matrix_t', matrix)
-      C.cairo_pattern_set_matrix(self.C, matrix)
+      C.cairo_pattern_set_matrix(self.C, matrix.C)
    end
 )
 
 Pattern.getMatrix =
    argcheck(
    {{name="self", type="cairo.Pattern"}},
-   function(self, matrix)
-      local matrix = ffi.new('cairo_matrix_t')
+   function(self)
+      local matrix = cairo.Matrix()
       C.cairo_pattern_get_matrix(self.C, matrix.C)
-      return {xx=matrix.xx, yx=matrix.yx, yy=matrix.xy, yy=matrix.yy, x0=matrix.x0, y0=matrix.y0}
+      return matrix
    end
 )
 

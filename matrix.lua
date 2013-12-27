@@ -9,6 +9,12 @@ cairo.Matrix = class.constructor(Matrix)
 
 Matrix.__init =
    argcheck(
+   {{name="self", type="cairo.Matrix"}},
+   function(self)
+      self.C = ffi.new('cairo_matrix_t')
+      return self
+   end,
+
    {{name="self", type="cairo.Matrix"},
     {name="xx", type="number"},
     {name="yx", type="number"},
@@ -29,6 +35,14 @@ Matrix.__init =
       self:set(values)
       return self
    end   
+)
+
+Matrix.totable =
+   argcheck(
+   {{name="self", type="cairo.Matrix"}},
+   function(self)
+      return {xx=self.C.xx, yx=self.C.yx, yy=self.C.xy, yy=self.C.yy, x0=self.C.x0, y0=self.C.y0}
+   end
 )
 
 Matrix.set =
