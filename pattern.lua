@@ -103,6 +103,8 @@ SolidPattern.getRGBA =
    end
 )
 
+cairo.SolidPattern = class.constructor(SolidPattern)
+
 -------------------
 
 local SurfacePattern = class.new('cairo.SurfacePattern', 'cairo.Pattern')
@@ -159,6 +161,8 @@ SurfacePattern.getSurface =
       return cairo.Surface(surface_p[0])
    end
 )
+
+cairo.SurfacePattern = class.constructor(SurfacePattern)
 
 -------------------
 
@@ -249,6 +253,8 @@ LinearGradientPattern.getLinearPoints =
    end
 )
 
+cairo.LinearGradientPattern = class.constructor(LinearGradientPattern)
+
 -------------------
 
 local RadialGradientPattern = class.new('cairo.RadialGradientPattern', 'cairo.GradientPattern')
@@ -283,6 +289,10 @@ RadialGradientPattern.getRadialCircles =
       return x0[0], y0[1], r0[0], x1[0], y1[0], y1[0]
    end
 )
+
+cairo.RadialGradientPattern = class.constructor(RadialGradientPattern)
+
+-------------------
 
 local MeshPattern = class.new('cairo.MeshPattern', 'cairo.Pattern')
 
@@ -430,3 +440,4 @@ MeshPattern.getControlPoint =
    end
 )
 
+cairo.MeshPattern = class.constructor(MeshPattern)
