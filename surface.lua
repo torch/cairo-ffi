@@ -72,25 +72,6 @@ Surface.getContent =
    end
 )
 
-Surface.writeToPNG =
-   argcheck(
-   {{name="self", type="cairo.Surface"},
-    {name="filename", type="string"}},
-   function(self, filename)
-      return C.cairo_surface_write_to_png(self.C, filename)
-   end
-)
-
-Surface.writeToPNGStream =
-   argcheck(
-   {{name="self", type="cairo.Surface"},
-    {name="write_func", type="function"},
-    {name="closure", type="void*"}},
-   function(self, write_func, closure)
-      return C.cairo_surface_write_to_png_stream(self.C, write_func, closure)
-   end
-)
-
 Surface.getUserData =
    argcheck(
    {{name="self", type="cairo.Surface"},

@@ -8,6 +8,7 @@ require 'cairo.enums'
 require 'cairo.context'
 require 'cairo.surface'
 require 'cairo.imagesurface'
+require 'cairo.pngsurface'
 require 'cairo.pattern'
 
 return cairo

@@ -30,6 +30,7 @@ build = {
       ["cairo.context"] = "context.lua",
       ["cairo.surface"] = "surface.lua",
       ["cairo.imagesurface"] = "imagesurface.lua",
+      ["cairo.pngsurface"] = "pngsurface.lua",
       ["cairo.pattern"] = "pattern.lua"
    }
 }
