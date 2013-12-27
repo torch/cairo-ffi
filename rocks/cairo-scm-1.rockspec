@@ -24,8 +24,12 @@ build = {
    modules = {
       ["cairo.env"] = "env.lua",
       ["cairo.init"] = "init.lua",
+      ["cairo.enums"] = "enums.lua",
       ["cairo.utils"] = "utils.lua",
       ["cairo.cdefs"] = "cdefs.lua",
-      ["cairo.context"] = "context.lua"
+      ["cairo.context"] = "context.lua",
+      ["cairo.surface"] = "surface.lua",
+      ["cairo.imagesurface"] = "imagesurface.lua",
+      ["cairo.pattern"] = "pattern.lua"
    }
 }
