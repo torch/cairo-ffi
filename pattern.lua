@@ -113,7 +113,7 @@ SurfacePattern.__init =
    argcheck(
    {{name="self", type="cairo.SurfacePattern"},
     {name="surface", type="cairo.Surface"}},
-   function(self)
+   function(self, surface)
       self.C = C.cairo_pattern_create_for_surface(surface.C)
       ffi.gc(self.C, C.cairo_pattern_destroy)
       return self
