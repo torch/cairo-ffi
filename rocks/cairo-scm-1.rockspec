@@ -25,6 +25,7 @@ build = {
       ["cairo.env"] = "env.lua",
       ["cairo.init"] = "init.lua",
       ["cairo.enums"] = "enums.lua",
+      ["cairo.matrix"] = "matrix.lua",
       ["cairo.utils"] = "utils.lua",
       ["cairo.cdefs"] = "cdefs.lua",
       ["cairo.context"] = "context.lua",
