@@ -1,6 +1,6 @@
 local argcheck = require 'argcheck'
 local class = require 'class'
-
+local ffi = require 'ffi'
 local cairo = require 'cairo.env'
 local utils = require 'cairo.utils'
 local C = cairo.C
@@ -15,6 +15,7 @@ Context.__init =
    function(self, surface)
       self.C = C.cairo_create(surface.C)
       ffi.gc(self.C, C.cairo_destroy)
+      return self
    end
 )
 
