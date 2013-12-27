@@ -114,7 +114,9 @@ SurfacePattern.__init =
    {{name="self", type="cairo.SurfacePattern"},
     {name="surface", type="cairo.Surface"}},
    function(self)
-      return C.cairo_pattern_create_for_surface(surface.C)
+      self.C = C.cairo_pattern_create_for_surface(surface.C)
+      ffi.gc(self.C, C.cairo_pattern_destroy)
+      return self
    end
 )
 
