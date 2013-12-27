@@ -1018,3 +1018,4 @@ Context.status =
    end
 )
 
+cairo.Context = class.constructor(Context, 'new')
