@@ -1,3 +1,4 @@
+local ffi = require 'ffi'
 local utils = {}
 
 function utils.glyphs_lua2C(tbl)

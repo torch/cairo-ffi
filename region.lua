@@ -2,6 +2,7 @@ local argcheck = require 'argcheck'
 local class = require 'class'
 local ffi = require 'ffi'
 local cairo = require 'cairo.env'
+local utils = require 'cairo.utils'
 local C = cairo.C
 
 local Region = class.new('cairo.Region')
@@ -141,7 +142,7 @@ Region.translate =
     {name="dx", type="number"},
     {name="dy", type="number"}},
    function(self, dx, dy)
-      C.cairo_region_translate(self.C)
+      C.cairo_region_translate(self.C, dx, dy)
    end
 )
 
@@ -198,7 +199,7 @@ Region.unionRectangle =
     {name="rectangle", type="table"}},
    function(self, rectangle)
       rectangle = utils.intrectangle_lua2C(rectangle)
-      return (C.cairo_region_union_rectangle(self.C, rectangle.C) == ffi.C.CAIRO_STATUS_SUCCESS)
+      return (C.cairo_region_union_rectangle(self.C, rectangle) == ffi.C.CAIRO_STATUS_SUCCESS)
    end
 )
 
@@ -217,7 +218,7 @@ Region.xorRectangle =
     {name="rectangle", type="table"}},
    function(self, rectangle)
       rectangle = utils.intrectangle_lua2C(rectangle)
-      return (C.cairo_region_xor_rectangle(self.C, rectangle.C) == ffi.C.CAIRO_STATUS_SUCCESS)
+      return (C.cairo_region_xor_rectangle(self.C, rectangle) == ffi.C.CAIRO_STATUS_SUCCESS)
    end
 )
 
