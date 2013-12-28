@@ -11,5 +11,6 @@ require 'cairo.surface'
 require 'cairo.imagesurface'
 require 'cairo.pngsurface'
 require 'cairo.pattern'
+require 'cairo.region'
 
 return cairo

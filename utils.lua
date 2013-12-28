@@ -12,7 +12,7 @@ function utils.glyphs_lua2C(tbl)
    return glyphs, num_glyphs
 end
 
-function utils.clusters_C2lua(tbl)
+function utils.clusters_lua2C(tbl)
    local num_clusters = #tbl
    local clusters = ffi.new('cairo_cluster_t[?]', num_clusters)
    for i=1,num_clusters do
@@ -21,6 +21,23 @@ function utils.clusters_C2lua(tbl)
       glyhs[i-1].num_glyphs = tbl[i].num_glyphs
    end
    return clusters, num_clusters
+end
+
+function utils.intrectangle_lua2C(tbl, rectangle)
+   assert(tbl.x and tbl.y and tbl.width and tbl.height, 'invalid rectangle: x, y width or height field missing')
+   if rectangle then
+      rectangle.x = tbl.x
+      rectangle.y = tbl.y
+      rectangle.width = tbl.width
+      rectangle.height = tbl.height
+   else
+      rectangle = ffi.new('cairo_rectangle_int_t', tbl)
+   end
+   return rectangle
+end
+
+function utils.intrectangle_C2lua(rectangle)
+   return {x=rectangle.x, y=rectangle.y, width=rectangle.width, height=rectangle.height}
 end
 
 return utils
