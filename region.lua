@@ -116,18 +116,15 @@ Region.isEmpty =
    end
 )
 
-Region.containsRectangle =
+Region.contains =
    argcheck(
    {{name="self", type="cairo.Region"},
     {name="rectangle", type="table"}},
    function(self, rectangle)
       rectangle = utils.intrectangle_lua2C(rectangle)
       return (C.cairo_region_contains_rectangle(self.C, rectangle) == 1)      
-   end
-)
+   end,
 
-Region.containsPoint =
-   argcheck(
    {{name="self", type="cairo.Region"},
     {name="x", type="number"},
     {name="y", type="number"}},
@@ -152,11 +149,8 @@ Region.subtract =
     {name="other", type="cairo.Region"}},
    function(self, other)
       return C.cairo_region_subtract(self.C, other.C)
-   end
-)
+   end,
 
-Region.subtractRectangle =
-   argcheck(
    {{name="self", type="cairo.Region"},
     {name="rectangle", type="table"}},
    function(self, rectangle)
@@ -171,11 +165,8 @@ Region.intersect =
     {name="other", type="cairo.Region"}},
    function(self, other)
       return (C.cairo_region_intersect(self.C, other.C) == ffi.C.CAIRO_STATUS_SUCCESS)
-   end
-)
+   end,
 
-Region.intersectRectangle =
-   argcheck(
    {{name="self", type="cairo.Region"},
     {name="rectangle", type="table"}},
    function(self, rectangle)
@@ -190,11 +181,8 @@ Region.union =
     {name="other", type="cairo.Region"}},
    function(self, other)
       return (C.cairo_region_union(self.C, other.C) == ffi.C.CAIRO_STATUS_SUCCESS)
-   end
-)
+   end,
 
-Region.unionRectangle =
-   argcheck(
    {{name="self", type="cairo.Region"},
     {name="rectangle", type="table"}},
    function(self, rectangle)
@@ -209,11 +197,8 @@ Region.xor =
     {name="other", type="cairo.Region"}},
    function(self, other)
       return (C.cairo_region_xor(self.C, other.C) == ffi.C.CAIRO_STATUS_SUCCESS)
-   end
-)
+   end,
 
-Region.xorRectangle =
-   argcheck(
    {{name="self", type="cairo.Region"},
     {name="rectangle", type="table"}},
    function(self, rectangle)
