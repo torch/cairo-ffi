@@ -53,25 +53,7 @@ Pattern.getType =
    argcheck(
    {{name="self", type="cairo.Pattern"}},
    function(self)
-      return cairo.enum
-
-Pattern.getUserData =
-   argcheck(
-   {{name="self", type="cairo.Pattern"},
-    {name="key", type="cairo_user_data_key_t*"}},
-   function(self, key)
-      return C.cairo_pattern_get_user_data(self.C, key)
-   end
-)
-
-Pattern.setUserData =
-   argcheck(
-   {{name="self", type="cairo.Pattern"},
-    {name="key", type="cairo_user_data_key_t*"},
-    {name="user_data", type="void*"},
-    {name="destroy", type="cairo_destroy_func_t"}},
-   function(self, key, user_data, destroy)
-      return C.cairo_pattern_set_user_data(self.C, key, user_data, destroy)
+      return cairo.enums.PatternType[ tonumber(C.cairo_pattern_get_type(self.C)) ]
    end
 )
 
