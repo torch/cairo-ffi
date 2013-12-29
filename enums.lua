@@ -240,3 +240,7 @@ enums.SVGVersion = {}
 protect(enums.SVGVersion, 'SVGVersion')
 register(enums.SVGVersion, '1-1', 'CAIRO_SVG_VERSION_1_1')
 register(enums.SVGVersion, '1-2', 'CAIRO_SVG_VERSION_1_2')
+enums.PDFVersion = {}
+protect(enums.PDFVersion, 'PDFVersion')
+register(enums.PDFVersion, '1-4', 'CAIRO_PDF_VERSION_1_4')
+register(enums.PDFVersion, '1-5', 'CAIRO_PDF_VERSION_1_5')

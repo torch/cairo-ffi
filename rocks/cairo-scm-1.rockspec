@@ -37,6 +37,7 @@ build = {
       ["cairo.fontoptions"] = "fontoptions.lua",
       ["cairo.path"] = "path.lua",
       ["cairo.fontface"] = "fontface.lua",
-      ["cairo.svgsurface"] = "svgsurface.lua"
+      ["cairo.svgsurface"] = "svgsurface.lua",
+      ["cairo.pdfsurface"] = "pdfsurface.lua"
    }
 }
