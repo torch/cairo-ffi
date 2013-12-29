@@ -236,3 +236,7 @@ protect(enums.RegionOverlap, 'RegionOverlap')
 register(enums.RegionOverlap, 'in', 'CAIRO_REGION_OVERLAP_IN')
 register(enums.RegionOverlap, 'out', 'CAIRO_REGION_OVERLAP_OUT')
 register(enums.RegionOverlap, 'part', 'CAIRO_REGION_OVERLAP_PART')
+enums.SVGVersion = {}
+protect(enums.SVGVersion, 'SVGVersion')
+register(enums.SVGVersion, '1-1', 'CAIRO_SVG_VERSION_1_1')
+register(enums.SVGVersion, '1-2', 'CAIRO_SVG_VERSION_1_2')
