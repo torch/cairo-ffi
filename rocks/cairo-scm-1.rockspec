@@ -35,6 +35,7 @@ build = {
       ["cairo.pattern"] = "pattern.lua",
       ["cairo.region"] = "region.lua",
       ["cairo.fontoptions"] = "fontoptions.lua",
-      ["cairo.path"] = "path.lua"
+      ["cairo.path"] = "path.lua",
+      ["cairo.fontface"] = "fontface.lua"
    }
 }
