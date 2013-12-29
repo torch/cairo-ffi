@@ -13,5 +13,6 @@ require 'cairo.pngsurface'
 require 'cairo.pattern'
 require 'cairo.region'
 require 'cairo.fontoptions'
+require 'cairo.path'
 
 return cairo
