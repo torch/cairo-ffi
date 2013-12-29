@@ -6,7 +6,7 @@ local utils = require 'cairo.utils'
 local C = cairo.C
 
 local Context = class.new('cairo.Context')
-
+cairo.Context = class.constructor(Context, 'new')
 
 Context.__init =
    argcheck(
@@ -19,31 +19,11 @@ Context.__init =
    end
 )
 
-Context.getUserData =
-   argcheck(
-   {{name="self", type="cairo.Context"},
-    {name="key", type="cairo_user_data_key_t*"}},
-   function(self, key)
-      return cairo.C.cairo_get_user_data(self.C, key)
-   end
-)
-
-Context.setUserData =
-   argcheck(
-   {{name="self", type="cairo.Context"},
-    {name="key", type="cairo_user_data_key_t*"},
-    {name="user_data", type="void*"},
-    {name="destroy", type="cairo_destroy_func_t"}},
-   function(self, key, user_data, destroy)
-      return cairo.C.cairo_set_user_data(self.C, key, user_data, destroy)
-   end
-)
-
 Context.save =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_save(self.C)
+      C.cairo_save(self.C)
    end
 )
 
@@ -51,7 +31,7 @@ Context.restore =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_restore(self.C)
+      C.cairo_restore(self.C)
    end
 )
 
@@ -59,7 +39,7 @@ Context.pushGroup =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_push_group(self.C)
+      C.cairo_push_group(self.C)
    end
 )
 
@@ -68,7 +48,7 @@ Context.pushGroupWithContent =
    {{name="self", type="cairo.Context"},
     {name="content", type="string"}},
    function(self, content)
-      cairo.C.cairo_push_group_with_content(self.C, cairo.enums.Content[content])
+      C.cairo_push_group_with_content(self.C, cairo.enums.Content[content])
    end
 )
 
@@ -76,7 +56,7 @@ Context.popGroup =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.Pattern(cairo.C.cairo_pop_group(self.C))
+      return cairo.Pattern(C.cairo_pop_group(self.C))
    end
 )
 
@@ -84,7 +64,7 @@ Context.popGroupToSource =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_pop_group_to_source(self.C)
+      C.cairo_pop_group_to_source(self.C)
    end
 )
 
@@ -93,7 +73,7 @@ Context.setOperator =
    {{name="self", type="cairo.Context"},
     {name="op", type="string"}},
    function(self, op)
-      cairo.C.cairo_set_operator(self.C, cairo.enums.Operator[op])
+      C.cairo_set_operator(self.C, cairo.enums.Operator[op])
    end
 )
 
@@ -102,7 +82,7 @@ Context.setSource =
    {{name="self", type="cairo.Context"},
     {name="source", type="cairo.Pattern"}},
    function(self, source)
-      cairo.C.cairo_set_source(self.C, source.C)
+      C.cairo_set_source(self.C, source.C)
    end
 )
 
@@ -113,7 +93,7 @@ Context.setSourceRGB =
     {name="green", type="number"},
     {name="blue", type="number"}},
    function(self, red, green, blue)
-      cairo.C.cairo_set_source_rgb(self.C, red, green, blue)
+      C.cairo_set_source_rgb(self.C, red, green, blue)
    end
 )
 
@@ -125,7 +105,7 @@ Context.setSourceRGBA =
     {name="blue", type="number"},
     {name="alpha", type="number"}},
    function(self, red, green, blue, alpha)
-      cairo.C.cairo_set_source_rgba(self.C, red, green, blue, alpha)
+      C.cairo_set_source_rgba(self.C, red, green, blue, alpha)
    end
 )
 
@@ -136,7 +116,7 @@ Context.setSourceSurface =
     {name="x", type="number", default=0},
     {name="y", type="number", default=0}},
    function(self, surface, x, y)
-      cairo.C.cairo_set_source_surface(self.C, surface.C, x, y)
+      C.cairo_set_source_surface(self.C, surface.C, x, y)
    end
 )
 
@@ -145,7 +125,7 @@ Context.setTolerance =
    {{name="self", type="cairo.Context"},
     {name="tolerance", type="number"}},
    function(self, tolerance)
-      cairo.C.cairo_set_tolerance(self.C, tolerance)
+      C.cairo_set_tolerance(self.C, tolerance)
    end
 )
 
@@ -154,7 +134,7 @@ Context.setAntialias =
    {{name="self", type="cairo.Context"},
     {name="antialias", type="string"}},
    function(self, antialias)
-      cairo.C.cairo_set_antialias(self.C, cairo.enums.AntiAlias[antialias])
+      C.cairo_set_antialias(self.C, cairo.enums.AntiAlias[antialias])
    end
 )
 
@@ -163,7 +143,7 @@ Context.setFillRule =
    {{name="self", type="cairo.Context"},
     {name="fill_rule", type="string"}},
    function(self, fill_rule)
-      cairo.C.cairo_set_fill_rule(self.C, cairo.enums.FillRule[fill_rule])
+      C.cairo_set_fill_rule(self.C, cairo.enums.FillRule[fill_rule])
    end
 )
 
@@ -172,7 +152,7 @@ Context.setLineWidth =
    {{name="self", type="cairo.Context"},
     {name="width", type="number"}},
    function(self, width)
-      cairo.C.cairo_set_line_width(self.C, width)
+      C.cairo_set_line_width(self.C, width)
    end
 )
 
@@ -181,7 +161,7 @@ Context.setLineCap =
    {{name="self", type="cairo.Context"},
     {name="line_cap", type="string"}},
    function(self, line_cap)
-      cairo.C.cairo_set_line_cap(self.C, cairo.enums.LineCap[line_cap])
+      C.cairo_set_line_cap(self.C, cairo.enums.LineCap[line_cap])
    end
 )
 
@@ -190,7 +170,7 @@ Context.setLineJoin =
    {{name="self", type="cairo.Context"},
     {name="line_join", type="string"}},
    function(self, line_join)
-      cairo.C.cairo_set_line_join(self.C, cairo.enums.LineJoin[line_join])
+      C.cairo_set_line_join(self.C, cairo.enums.LineJoin[line_join])
    end
 )
 
@@ -202,7 +182,7 @@ Context.setDash =
    function(self, dashes, offset)
       local num_dashes = #dashes
       local dashes_p = ffi.new('double[?]', num_dashes, dashes)
-      cairo.C.cairo_set_dash(self.C, dashes_p, num_dashes, offset)
+      C.cairo_set_dash(self.C, dashes_p, num_dashes, offset)
    end
 )
 
@@ -211,7 +191,7 @@ Context.setMiterLimit =
    {{name="self", type="cairo.Context"},
     {name="limit", type="number"}},
    function(self, limit)
-      cairo.C.cairo_set_miter_limit(self.C, limit)
+      C.cairo_set_miter_limit(self.C, limit)
    end
 )
 
@@ -221,7 +201,7 @@ Context.translate =
     {name="tx", type="number"},
     {name="ty", type="number"}},
    function(self, tx, ty)
-      cairo.C.cairo_translate(self.C, tx, ty)
+      C.cairo_translate(self.C, tx, ty)
    end
 )
 
@@ -231,7 +211,7 @@ Context.scale =
     {name="sx", type="number"},
     {name="sy", type="number"}},
    function(self, sx, sy)
-      cairo.C.cairo_scale(self.C, sx, sy)
+      C.cairo_scale(self.C, sx, sy)
    end
 )
 
@@ -240,7 +220,7 @@ Context.rotate =
    {{name="self", type="cairo.Context"},
     {name="angle", type="number"}},
    function(self, angle)
-      cairo.C.cairo_rotate(self.C, angle)
+      C.cairo_rotate(self.C, angle)
    end
 )
 
@@ -249,7 +229,7 @@ Context.transform =
    {{name="self", type="cairo.Context"},
     {name="matrix", type="cairo.Matrix"}},
    function(self, matrix)
-      cairo.C.cairo_transform(self.C, matrix.C)
+      C.cairo_transform(self.C, matrix.C)
    end
 )
 
@@ -258,7 +238,7 @@ Context.setMatrix =
    {{name="self", type="cairo.Context"},
     {name="matrix", type="cairo.Matrix"}},
    function(self, matrix)
-      cairo.C.cairo_set_matrix(self.C, matrix.C)
+      C.cairo_set_matrix(self.C, matrix.C)
    end
 )
 
@@ -266,7 +246,7 @@ Context.identityMatrix =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_identity_matrix(self.C)
+      C.cairo_identity_matrix(self.C)
    end
 )
 
@@ -276,7 +256,7 @@ Context.userToDevice =
    function(self, x, y)
       local x = ffi.new('double[1]')
       local y = ffi.new('double[1]')
-      cairo.C.cairo_user_to_device(self.C, x, y)
+      C.cairo_user_to_device(self.C, x, y)
       return x[0], y[0]
    end
 )
@@ -287,7 +267,7 @@ Context.userToDeviceDistance =
    function(self)
       local dx = ffi.new('double[1]')
       local dy = ffi.new('double[1]')
-      cairo.C.cairo_user_to_device_distance(self.C, dx, dy)
+      C.cairo_user_to_device_distance(self.C, dx, dy)
       return dx[0], dy[0]
    end
 )
@@ -298,7 +278,7 @@ Context.deviceToUser =
    function(self)
       local x = ffi.new('double[1]')
       local y = ffi.new('double[1]')
-      cairo.C.cairo_device_to_user(self.C, x, y)
+      C.cairo_device_to_user(self.C, x, y)
       return x[0], y[0]
    end
 )
@@ -309,7 +289,7 @@ Context.deviceToUserDistance =
    function(self)
       local dx = ffi.new('double[1]')
       local dy = ffi.new('double[1]')
-      cairo.C.cairo_device_to_user_distance(self.C, dx, dy)
+      C.cairo_device_to_user_distance(self.C, dx, dy)
       return dx[0], dy[0]
    end
 )
@@ -318,7 +298,7 @@ Context.newPath =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_new_path(self.C)
+      C.cairo_new_path(self.C)
    end
 )
 
@@ -328,7 +308,7 @@ Context.moveTo =
     {name="x", type="number"},
     {name="y", type="number"}},
    function(self, x, y)
-      cairo.C.cairo_move_to(self.C, x, y)
+      C.cairo_move_to(self.C, x, y)
    end
 )
 
@@ -336,7 +316,7 @@ Context.newSubPath =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_new_sub_path(self.C)
+      C.cairo_new_sub_path(self.C)
    end
 )
 
@@ -346,7 +326,7 @@ Context.lineTo =
     {name="x", type="number"},
     {name="y", type="number"}},
    function(self, x, y)
-      cairo.C.cairo_line_to(self.C, x, y)
+      C.cairo_line_to(self.C, x, y)
    end
 )
 
@@ -360,7 +340,7 @@ Context.curveTo =
     {name="x3", type="number"},
     {name="y3", type="number"}},
    function(self, x1, y1, x2, y2, x3, y3)
-      cairo.C.cairo_curve_to(self.C, x1, y1, x2, y2, x3, y3)
+      C.cairo_curve_to(self.C, x1, y1, x2, y2, x3, y3)
    end
 )
 
@@ -373,7 +353,7 @@ Context.arc =
     {name="angle1", type="number"},
     {name="angle2", type="number"}},
    function(self, xc, yc, radius, angle1, angle2)
-      cairo.C.cairo_arc(self.C, xc, yc, radius, angle1, angle2)
+      C.cairo_arc(self.C, xc, yc, radius, angle1, angle2)
    end
 )
 
@@ -386,7 +366,7 @@ Context.arcNegative =
     {name="angle1", type="number"},
     {name="angle2", type="number"}},
    function(self, xc, yc, radius, angle1, angle2)
-      cairo.C.cairo_arc_negative(self.C, xc, yc, radius, angle1, angle2)
+      C.cairo_arc_negative(self.C, xc, yc, radius, angle1, angle2)
    end
 )
 
@@ -396,7 +376,7 @@ Context.relMoveTo =
     {name="dx", type="number"},
     {name="dy", type="number"}},
    function(self, dx, dy)
-      cairo.C.cairo_rel_move_to(self.C, dx, dy)
+      C.cairo_rel_move_to(self.C, dx, dy)
    end
 )
 
@@ -406,7 +386,7 @@ Context.relLineTo =
     {name="dx", type="number"},
     {name="dy", type="number"}},
    function(self, dx, dy)
-      cairo.C.cairo_rel_line_to(self.C, dx, dy)
+      C.cairo_rel_line_to(self.C, dx, dy)
    end
 )
 
@@ -420,7 +400,7 @@ Context.relCurveTo =
     {name="dx3", type="number"},
     {name="dy3", type="number"}},
    function(self, dx1, dy1, dx2, dy2, dx3, dy3)
-      cairo.C.cairo_rel_curve_to(self.C, dx1, dy1, dx2, dy2, dx3, dy3)
+      C.cairo_rel_curve_to(self.C, dx1, dy1, dx2, dy2, dx3, dy3)
    end
 )
 
@@ -432,7 +412,7 @@ Context.rectangle =
     {name="width", type="number"},
     {name="height", type="number"}},
    function(self, x, y, width, height)
-      cairo.C.cairo_rectangle(self.C, x, y, width, height)
+      C.cairo_rectangle(self.C, x, y, width, height)
    end
 )
 
@@ -440,7 +420,7 @@ Context.closePath =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_close_path(self.C)
+      C.cairo_close_path(self.C)
    end
 )
 
@@ -452,7 +432,7 @@ Context.pathExtents =
       local y1 = ffi.new('double[1]')
       local x2 = ffi.new('double[1]')
       local y2 = ffi.new('double[1]')
-      cairo.C.cairo_path_extents(self.C, x1, y1, x2, y2)
+      C.cairo_path_extents(self.C, x1, y1, x2, y2)
       return x1[0], y1[0], x2[0], y2[0]
    end
 )
@@ -461,7 +441,7 @@ Context.paint =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_paint(self.C)
+      C.cairo_paint(self.C)
    end
 )
 
@@ -470,7 +450,7 @@ Context.paintWithAlpha =
    {{name="self", type="cairo.Context"},
     {name="alpha", type="number"}},
    function(self, alpha)
-      cairo.C.cairo_paint_with_alpha(self.C, alpha)
+      C.cairo_paint_with_alpha(self.C, alpha)
    end
 )
 
@@ -479,7 +459,7 @@ Context.mask =
    {{name="self", type="cairo.Context"},
     {name="pattern", type="cairo.Pattern"}},
    function(self, pattern)
-      cairo.C.cairo_mask(self.C, pattern.C)
+      C.cairo_mask(self.C, pattern.C)
    end
 )
 
@@ -490,7 +470,7 @@ Context.maskSurface =
     {name="surface_x", type="number"},
     {name="surface_y", type="number"}},
    function(self, surface, surface_x, surface_y)
-      cairo.C.cairo_mask_surface(self.C, surface.C, surface_x, surface_y)
+      C.cairo_mask_surface(self.C, surface.C, surface_x, surface_y)
    end
 )
 
@@ -498,7 +478,7 @@ Context.stroke =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_stroke(self.C)
+      C.cairo_stroke(self.C)
    end
 )
 
@@ -506,7 +486,7 @@ Context.strokePreserve =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_stroke_preserve(self.C)
+      C.cairo_stroke_preserve(self.C)
    end
 )
 
@@ -514,7 +494,7 @@ Context.fill =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_fill(self.C)
+      C.cairo_fill(self.C)
    end
 )
 
@@ -522,7 +502,7 @@ Context.fillPreserve =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_fill_preserve(self.C)
+      C.cairo_fill_preserve(self.C)
    end
 )
 
@@ -530,7 +510,7 @@ Context.copyPage =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_copy_page(self.C)
+      C.cairo_copy_page(self.C)
    end
 )
 
@@ -538,7 +518,7 @@ Context.showPage =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_show_page(self.C)
+      C.cairo_show_page(self.C)
    end
 )
 
@@ -548,7 +528,7 @@ Context.inStroke =
     {name="x", type="number"},
     {name="y", type="number"}},
    function(self, x, y)
-      return (cairo.C.cairo_in_stroke(self.C, x, y) == 1)
+      return (C.cairo_in_stroke(self.C, x, y) == 1)
    end
 )
 
@@ -558,7 +538,7 @@ Context.inFill =
     {name="x", type="number"},
     {name="y", type="number"}},
    function(self, x, y)
-      return (cairo.C.cairo_in_fill(self.C, x, y) == 1)
+      return (C.cairo_in_fill(self.C, x, y) == 1)
    end
 )
 
@@ -568,7 +548,7 @@ Context.inClip =
     {name="x", type="number"},
     {name="y", type="number"}},
    function(self, x, y)
-      return (cairo.C.cairo_in_clip(self.C, x, y) == 1)
+      return (C.cairo_in_clip(self.C, x, y) == 1)
    end
 )
 
@@ -580,7 +560,7 @@ Context.strokeExtents =
       local y1 = ffi.new('double[1]')
       local x2 = ffi.new('double[1]')
       local y2 = ffi.new('double[1]')
-      cairo.C.cairo_stroke_extents(self.C, x1, y1, x2, y2)
+      C.cairo_stroke_extents(self.C, x1, y1, x2, y2)
       return x1[0], y1[0], x2[0], y2[0]
    end
 )
@@ -593,7 +573,7 @@ Context.fillExtents =
       local y1 = ffi.new('double[1]')
       local x2 = ffi.new('double[1]')
       local y2 = ffi.new('double[1]')
-      cairo.C.cairo_fill_extents(self.C, x1, y1, x2, y2)
+      C.cairo_fill_extents(self.C, x1, y1, x2, y2)
       return x1[0], y1[0], x2[0], y2[0]
    end
 )
@@ -602,7 +582,7 @@ Context.resetClip =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_reset_clip(self.C)
+      C.cairo_reset_clip(self.C)
    end
 )
 
@@ -610,7 +590,7 @@ Context.clip =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_clip(self.C)
+      C.cairo_clip(self.C)
    end
 )
 
@@ -618,7 +598,7 @@ Context.clipPreserve =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      cairo.C.cairo_clip_preserve(self.C)
+      C.cairo_clip_preserve(self.C)
    end
 )
 
@@ -630,7 +610,7 @@ Context.clipExtents =
       local y1 = ffi.new('double[1]')
       local x2 = ffi.new('double[1]')
       local y2 = ffi.new('double[1]')
-      cairo.C.cairo_clip_extents(self.C, x1, y1, x2, y2)
+      C.cairo_clip_extents(self.C, x1, y1, x2, y2)
       return x1[0], y1[0], x2[0], y2[0]
    end
 )
@@ -639,7 +619,7 @@ Context.copyClipRectangleList =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      local list_p = cairo.C.cairo_copy_clip_rectangle_list(self.C)
+      local list_p = C.cairo_copy_clip_rectangle_list(self.C)
       if list_p.status == ffi.CAIRO_STATUS_SUCCESS then
          local list = {}
          for i=1,list_p.num_rectangles do
@@ -660,7 +640,7 @@ Context.selectFontFace =
     {name="slant", type="string"},
     {name="weight", type="string"}},
    function(self, family, slant, weight)
-      cairo.C.cairo_select_font_face(self.C, family, cairo.enums.FontSlant[slant], cairo.enums.FontWeight[weight])
+      C.cairo_select_font_face(self.C, family, cairo.enums.FontSlant[slant], cairo.enums.FontWeight[weight])
    end
 )
 
@@ -669,7 +649,7 @@ Context.setFontSize =
    {{name="self", type="cairo.Context"},
     {name="size", type="number"}},
    function(self, size)
-      cairo.C.cairo_set_font_size(self.C, size)
+      C.cairo_set_font_size(self.C, size)
    end
 )
 
@@ -678,7 +658,7 @@ Context.setFontMatrix =
    {{name="self", type="cairo.Context"},
     {name="matrix", type="cairo.Matrix"}},
    function(self, matrix)
-      cairo.C.cairo_set_font_matrix(self.C, matrix.C)
+      C.cairo_set_font_matrix(self.C, matrix.C)
    end
 )
 
@@ -687,7 +667,7 @@ Context.getFontMatrix =
    {{name="self", type="cairo.Context"}},
    function(self)
       local matrix = cairo.Matrix()
-      cairo.C.cairo_get_font_matrix(self.C, matrix.C)
+      C.cairo_get_font_matrix(self.C, matrix.C)
       return matrix
    end
 )
@@ -697,7 +677,7 @@ Context.setFontOptions =
    {{name="self", type="cairo.Context"},
     {name="options", type="cairo.FontOptions"}},
    function(self, options)
-      cairo.C.cairo_set_font_options(self.C, options.C)
+      C.cairo_set_font_options(self.C, options.C)
    end
 )
 
@@ -706,7 +686,7 @@ Context.getFontOptions =
    {{name="self", type="cairo.Context"},
     {name="options", type="cairo.FontOptions"}},
    function(self, options)
-      cairo.FontOptions(cairo.C.cairo_get_font_options(self.C, options.C))
+      cairo.FontOptions(C.cairo_get_font_options(self.C, options.C))
    end
 )
 
@@ -715,7 +695,7 @@ Context.setFontFace =
    {{name="self", type="cairo.Context"},
     {name="font_face", type="cairo.FontFace"}},
    function(self, font_face)
-      cairo.C.cairo_set_font_face(self.C, font_face.C)
+      C.cairo_set_font_face(self.C, font_face.C)
    end
 )
 
@@ -723,7 +703,7 @@ Context.getFontFace =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.FontFace(cairo.C.cairo_get_font_face(self.C))
+      return cairo.FontFace(C.cairo_get_font_face(self.C), true)
    end
 )
 
@@ -732,7 +712,7 @@ Context.setScaledFont =
    {{name="self", type="cairo.Context"},
     {name="scaled_font", type="cairo.ScaledFont"}},
    function(self, scaled_font)
-      cairo.C.cairo_set_scaled_font(self.C, scaled_font.C)
+      C.cairo_set_scaled_font(self.C, scaled_font.C)
    end
 )
 
@@ -740,7 +720,7 @@ Context.getScaledFont =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.ScaledFont(cairo.C.cairo_get_scaled_font(self.C))
+      return cairo.ScaledFont(C.cairo_get_scaled_font(self.C), true)
    end
 )
 
@@ -749,7 +729,7 @@ Context.showText =
    {{name="self", type="cairo.Context"},
     {name="utf8", type="string"}},
    function(self, utf8)
-      cairo.C.cairo_show_text(self.C, utf8)
+      C.cairo_show_text(self.C, utf8)
    end
 )
 
@@ -759,7 +739,7 @@ Context.showGlyphs =
     {name="glyphs", type="table"}},
    function(self, glyphs)
       local glyphs_p, num_glyphs = utils.glyphs_lua2C(glyphs)
-      cairo.C.cairo_show_glyphs(self.C, glyphs_p, num_glyphs)
+      C.cairo_show_glyphs(self.C, glyphs_p, num_glyphs)
    end
 )
 
@@ -774,7 +754,7 @@ Context.showTextGlyphs =
       local utf8_len = #utf8
       local glyphs_p, num_glyphs = utils.glyphs_lua2C(glyphs)
       local clusters_p, num_clusters = utils.clusters_lua2C(clusters)
-      cairo.C.cairo_show_text_glyphs(self.C, utf8, utf8_len, glyphs_p, num_glyphs, clusters_p, num_clusters, cairo.enums.TextClusterFlags[cluster_flags])
+      C.cairo_show_text_glyphs(self.C, utf8, utf8_len, glyphs_p, num_glyphs, clusters_p, num_clusters, cairo.enums.TextClusterFlags[cluster_flags])
    end
 )
 
@@ -783,7 +763,7 @@ Context.textPath =
    {{name="self", type="cairo.Context"},
     {name="utf8", type="string"}},
    function(self, utf8)
-      cairo.C.cairo_text_path(self.C, utf8)
+      C.cairo_text_path(self.C, utf8)
    end
 )
 
@@ -793,7 +773,7 @@ Context.glyphPath =
     {name="glyphs", type="table"}},
    function(self, glyphs)
       local glyphs_p, num_glyphs = utils.glyphs_lua2C(glyphs)
-      cairo.C.cairo_glyph_path(self.C, glyphs_p, num_glyphs)
+      C.cairo_glyph_path(self.C, glyphs_p, num_glyphs)
    end
 )
 
@@ -803,7 +783,7 @@ Context.textExtents =
     {name="utf8", type="string"}},
    function(self, utf8)
       local extents = ffi.new('cairo_text_extents_t')
-      cairo.C.cairo_text_extents(self.C, utf8, extents)
+      C.cairo_text_extents(self.C, utf8, extents)
       return {
          x_bearing=extents.x_bearing, y_bearing=extents.y_bearing,
          width=extents.width, height=extents.height,
@@ -819,7 +799,7 @@ Context.glyphExtents =
    function(self, glyphs)
       local glyphs_p, num_glyphs = utils.glyphs_lua2C(glyphs)
       local extents = ffi.new('cairo_text_extents_t')
-      cairo.C.cairo_glyph_extents(self.C, glyphs_p, num_glyphs, extents)
+      C.cairo_glyph_extents(self.C, glyphs_p, num_glyphs, extents)
       return {
          x_bearing=extents.x_bearing, y_bearing=extents.y_bearing,
          width=extents.width, height=extents.height,
@@ -833,7 +813,7 @@ Context.fontExtents =
    {{name="self", type="cairo.Context"}},
    function(self)
       local extents = ffi.new('cairo_font_extents_t')
-      cairo.C.cairo_font_extents(self.C, extents)
+      C.cairo_font_extents(self.C, extents)
       return {
          ascent=extents.ascent, descent=extents.descent,
          height=extents.height,
@@ -846,7 +826,7 @@ Context.getOperator =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.enums.Operator[cairo.C.cairo_get_operator(self.C)]
+      return cairo.enums.Operator[ tonumber(C.cairo_get_operator(self.C)) ]
    end
 )
 
@@ -854,7 +834,7 @@ Context.getSource =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.C.cairo_get_source(self.C)
+      return cairo.Pattern(C.cairo_get_source(self.C), true)
    end
 )
 
@@ -862,7 +842,7 @@ Context.getTolerance =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.C.cairo_get_tolerance(self.C)
+      return C.cairo_get_tolerance(self.C)
    end
 )
 
@@ -870,7 +850,7 @@ Context.getAntialias =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.enums.Antialias[cairo.C.cairo_get_antialias(self.C)]
+      return cairo.enums.Antialias[ tonumber(C.cairo_get_antialias(self.C)) ]
    end
 )
 
@@ -878,7 +858,7 @@ Context.hasCurrentPoint =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return (cairo.C.cairo_has_current_point(self.C) == 1)
+      return (C.cairo_has_current_point(self.C) == 1)
    end
 )
 
@@ -888,7 +868,7 @@ Context.getCurrentPoint =
    function(self)
       local x = ffi.new('double[1]')
       local y = ffi.new('double[1]')
-      cairo.C.cairo_get_current_point(self.C, x, y)
+      C.cairo_get_current_point(self.C, x, y)
       return x[0], y[0]
    end
 )
@@ -897,7 +877,7 @@ Context.getFillRule =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.enums.FillRule[cairo.C.cairo_get_fill_rule(self.C)]
+      return cairo.enums.FillRule[ tonumber(C.cairo_get_fill_rule(self.C)) ]
    end
 )
 
@@ -905,7 +885,7 @@ Context.getLineWidth =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.C.cairo_get_line_width(self.C)
+      return C.cairo_get_line_width(self.C)
    end
 )
 
@@ -913,7 +893,7 @@ Context.getLineCap =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.enums.LineCap[cairo.C.cairo_get_line_cap(self.C)]
+      return cairo.enums.LineCap[ tonumber(C.cairo_get_line_cap(self.C)) ]
    end
 )
 
@@ -921,7 +901,7 @@ Context.getLineJoin =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.enums.LineJoin[cairo.C.cairo_get_line_join(self.C)]
+      return cairo.enums.LineJoin[ tonumber(C.cairo_get_line_join(self.C)) ]
    end
 )
 
@@ -929,7 +909,7 @@ Context.getMiterLimit =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.C.cairo_get_miter_limit(self.C)
+      return C.cairo_get_miter_limit(self.C)
    end
 )
 
@@ -937,7 +917,7 @@ Context.getDashCount =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.C.cairo_get_dash_count(self.C)
+      return C.cairo_get_dash_count(self.C)
    end
 )
 
@@ -948,7 +928,7 @@ Context.getDash =
       local n_dash = self:getDashCount()
       local dashes_p = ffi.new('double[?]', n_dash)
       local offset_p = ffi.new('double[1]')
-      cairo.C.cairo_get_dash(self.C, dashes_p, offset)
+      C.cairo_get_dash(self.C, dashes_p, offset)
       local dashes = {}
       for i=0,n_dash-1 do
          table.insert(dashes, dashes_p[i])
@@ -961,8 +941,8 @@ Context.getMatrix =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      local matrix = cairo.Matrix
-      cairo.C.cairo_get_matrix(self.C, matrix.C)
+      local matrix = cairo.Matrix()
+      C.cairo_get_matrix(self.C, matrix.C)
       return matrix
    end
 )
@@ -971,7 +951,7 @@ Context.getTarget =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.Surface(cairo.C.cairo_get_target(self.C))
+      return cairo.Surface(C.cairo_get_target(self.C), true)
    end
 )
 
@@ -979,7 +959,7 @@ Context.getGroupTarget =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.Surface(cairo.C.cairo_get_group_target(self.C))
+      return cairo.Surface(C.cairo_get_group_target(self.C), true)
    end
 )
 
@@ -987,7 +967,7 @@ Context.copyPath =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.Path(cairo.C.cairo_copy_path(self.C))
+      return cairo.Path(C.cairo_copy_path(self.C))
    end
 )
 
@@ -995,7 +975,7 @@ Context.copyPathFlat =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.Path(cairo.C.cairo_copy_path_flat(self.C))
+      return cairo.Path(C.cairo_copy_path_flat(self.C))
    end
 )
 
@@ -1004,7 +984,7 @@ Context.appendPath =
    {{name="self", type="cairo.Context"},
     {name="path", type="cairo.Path"}},
    function(self, path)
-      cairo.C.cairo_append_path(self.C, path.C)
+      C.cairo_append_path(self.C, path.C)
    end
 )
 
@@ -1012,8 +992,6 @@ Context.status =
    argcheck(
    {{name="self", type="cairo.Context"}},
    function(self)
-      return cairo.enums.Status[cairo.C.cairo_status(self.C)]
+      return cairo.enums.Status[ tonumber(C.cairo_status(self.C)) ]
    end
 )
-
-cairo.Context = class.constructor(Context, 'new')

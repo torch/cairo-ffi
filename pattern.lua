@@ -5,6 +5,22 @@ local cairo = require 'cairo.env'
 local C = cairo.C
 
 local Pattern = class.new('cairo.Pattern')
+cairo.Pattern = class.constructor(Pattern)
+
+Pattern.__init =
+   argcheck(
+   {{name="self", type="cairo.Pattern"},
+    {name="cdata", type="cdata"},
+    {name="incref", type="boolean", default=false}},
+   function(self, cdata, incref)
+      self.C = cdata
+      if incref then
+         C.cairo_pattern_reference(self.C)
+      end
+      ffi.gc(self.C, C.cairo_pattern_destroy)
+      return self
+   end
+)
 
 Pattern.setMatrix =
    argcheck(
@@ -29,7 +45,7 @@ Pattern.status =
    argcheck(
    {{name="self", type="cairo.Pattern"}},
    function(self)
-      return cairo.enums.Status[ C.cairo_pattern_status(self.C) ]
+      return cairo.enums.Status[ tonumber(C.cairo_pattern_status(self.C)) ]
    end
 )
 
@@ -37,9 +53,7 @@ Pattern.getType =
    argcheck(
    {{name="self", type="cairo.Pattern"}},
    function(self)
-      return cairo.enums.PatternType[ C.cairo_pattern_get_type(self.C) ]
-   end
-)
+      return cairo.enum
 
 Pattern.getUserData =
    argcheck(
@@ -132,7 +146,7 @@ SurfacePattern.getExtend =
    argcheck(
    {{name="self", type="cairo.SurfacePattern"}},
    function(self)
-      return cairo.enums.Extend[ C.cairo_pattern_get_extend(self.C) ]
+      return cairo.enums.Extend[ tonumber(C.cairo_pattern_get_extend(self.C)) ]
    end
 )
 
@@ -149,7 +163,7 @@ SurfacePattern.getFilter =
    argcheck(
    {{name="self", type="cairo.SurfacePattern"}},
    function(self)
-      return cairo.enums.Filter[ C.cairo_pattern_get_filter(self.C) ]
+      return cairo.enums.Filter[ tonumber(C.cairo_pattern_get_filter(self.C)) ]
    end
 )
 

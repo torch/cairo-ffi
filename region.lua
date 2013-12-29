@@ -72,7 +72,7 @@ Region.status =
    argcheck(
    {{name="self", type="cairo.Region"}},
    function(self)
-      return cairo.enums.Status[ C.cairo_region_status(self.C) ]
+      return cairo.enums.Status[ tonumber(C.cairo_region_status(self.C)) ]
    end
 )
 

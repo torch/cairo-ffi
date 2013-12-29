@@ -28,7 +28,7 @@ FontOptions.status =
    argcheck(
    {{name="self", type="cairo.FontOptions"}},
    function(self)
-      return cairo.enums.Status[ C.cairo_font_options_status(self.C) ]
+      return cairo.enums.Status[ tonumber(C.cairo_font_options_status(self.C)) ]
    end
 )
 
@@ -63,7 +63,7 @@ FontOptions.getAntialias =
    argcheck(
    {{name="self", type="cairo.FontOptions"}},
    function(self)
-      return cairo.enums.AntiAlias[ C.cairo_font_options_get_antialias(self.C) ]
+      return cairo.enums.AntiAlias[ tonumber(C.cairo_font_options_get_antialias(self.C)) ]
    end
 )
 
@@ -80,7 +80,7 @@ FontOptions.getSubpixelOrder =
    argcheck(
    {{name="self", type="cairo.FontOptions"}},
    function(self)
-      return cairo.enums.SubpixelOrder[ C.cairo_font_options_get_subpixel_order(self.C) ]
+      return cairo.enums.SubpixelOrder[ tonumber(C.cairo_font_options_get_subpixel_order(self.C)) ]
    end
 )
 
@@ -97,7 +97,7 @@ FontOptions.getHintStyle =
    argcheck(
    {{name="self", type="cairo.FontOptions"}},
    function(self)
-      return cairo.enums.HintStyle[ C.cairo_font_options_get_hint_style(self.C) ]
+      return cairo.enums.HintStyle[ tonumber(C.cairo_font_options_get_hint_style(self.C)) ]
    end
 )
 
@@ -114,7 +114,7 @@ FontOptions.getHintMetrics =
    argcheck(
    {{name="self", type="cairo.FontOptions"}},
    function(self)
-      return cairo.enums.HintMetrics[ C.cairo_font_options_get_hint_metrics(self.C) ]
+      return cairo.enums.HintMetrics[ tonumber(C.cairo_font_options_get_hint_metrics(self.C)) ]
    end
 )
 

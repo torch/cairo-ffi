@@ -53,7 +53,7 @@ ImageSurface.getFormat =
    argcheck(
    {{name="self", type="cairo.Surface"}},
    function(self)
-      return cairo.enums.Format[ C.cairo_image_surface_get_format(self.C) ]
+      return cairo.enums.Format[ tonumber(C.cairo_image_surface_get_format(self.C)) ]
    end
 )
 

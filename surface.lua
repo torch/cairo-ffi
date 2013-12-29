@@ -29,6 +29,18 @@ Surface.__init =
       self.C = C.cairo_surface_create_for_rectangle(surface.C, x, y, width, height)
       ffi.gc(self.C, C.cairo_surface_destroy)
       return self
+   end,
+
+  {{name="self", type="cairo.Surface"},
+    {name="cdata", type="cdata"},
+    {name="incref", type="boolean", default=false}},
+   function(self, cdata, incref)
+      self.C = cdata
+      if incref then
+         C.cairo_surface_reference(self.C)
+      end
+      ffi.gc(self.C, C.cairo_surface_destroy)
+      return self
    end
 )
 
@@ -52,7 +64,7 @@ Surface.status =
    argcheck(
    {{name="self", type="cairo.Surface"}},
    function(self)
-      return cairo.enums.Status[ C.cairo_surface_status(self.C) ]
+      return cairo.enums.Status[ tonumber(C.cairo_surface_status(self.C)) ]
    end
 )
 
@@ -60,7 +72,7 @@ Surface.getType =
    argcheck(
    {{name="self", type="cairo.Surface"}},
    function(self)
-      return cairo.enums.SurfaceType[ C.cairo_surface_get_type(self.C) ]
+      return cairo.enums.SurfaceType[ tonumber(C.cairo_surface_get_type(self.C)) ]
    end
 )
 
@@ -68,7 +80,7 @@ Surface.getContent =
    argcheck(
    {{name="self", type="cairo.Surface"}},
    function(self)
-      return cairo.enums.Content[ C.cairo_surface_get_content(self.C) ]
+      return cairo.enums.Content[ tonumber(C.cairo_surface_get_content(self.C)) ]
    end
 )
 
