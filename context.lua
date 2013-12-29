@@ -683,10 +683,11 @@ Context.setFontOptions =
 
 Context.getFontOptions =
    argcheck(
-   {{name="self", type="cairo.Context"},
-    {name="options", type="cairo.FontOptions"}},
-   function(self, options)
+   {{name="self", type="cairo.Context"}},
+   function(self)
+      local options = cairo.FontOptions()
       cairo.FontOptions(C.cairo_get_font_options(self.C, options.C))
+      return options
    end
 )
 
