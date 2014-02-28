@@ -37,6 +37,18 @@ ImageSurface.__init =
       self.C = C.cairo_surface_map_to_image(other.C, extents_p)
       ffi.gc(self.C, C.cairo_surface_unmap_image)
       return self
+   end,
+
+   {{name="self", type="cairo.ImageSurface"},
+    {name="data", type="cdata"},
+    {name="format", type="string"},
+    {name="width", type="number"},
+    {name="height", type="number"},
+    {name="stride", type="number"}},
+   function(self, data, format, width, height, stride)
+      self.C = C.cairo_image_surface_create_for_data(data, cairo.enums.Format[format], width, height, stride)
+      ffi.gc(self.C, C.cairo_surface_destroy)
+      return self
    end
 )
 
