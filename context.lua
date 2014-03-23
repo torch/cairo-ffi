@@ -4,9 +4,16 @@ local ffi = require 'ffi'
 local cairo = require 'cairo.env'
 local utils = require 'cairo.utils'
 local C = cairo.C
+local doc = require 'argcheck.doc'
 
 local Context = class.new('cairo.Context')
 cairo.Context = Context
+
+doc[[
+
+### Drawing Context
+
+]]
 
 Context.__init = argcheck{
    {name="self", type="cairo.Context"},
@@ -16,6 +23,15 @@ Context.__init = argcheck{
          self.C = C.cairo_create(surface.C)
          ffi.gc(self.C, C.cairo_destroy)
          return self
+      end
+}
+
+
+Context.status = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         return cairo.enums.Status[ tonumber(C.cairo_status(self.C)) ]
       end
 }
 
@@ -32,6 +48,14 @@ Context.restore = argcheck{
    call =
       function(self)
          C.cairo_restore(self.C)
+      end
+}
+
+Context.getTarget = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         return cairo.Surface(C.cairo_get_target(self.C), true)
       end
 }
 
@@ -68,21 +92,11 @@ Context.popGroupToSource = argcheck{
       end
 }
 
-Context.setOperator = argcheck{
+Context.getGroupTarget = argcheck{
    {name="self", type="cairo.Context"},
-   {name="op", type="string"},
    call =
-      function(self, op)
-         C.cairo_set_operator(self.C, cairo.enums.Operator[op])
-      end
-}
-
-Context.setSource = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="source", type="cairo.Pattern"},
-   call =
-      function(self, source)
-         C.cairo_set_source(self.C, source.C)
+      function(self)
+         return cairo.Surface(C.cairo_get_group_target(self.C), true)
       end
 }
 
@@ -109,6 +123,15 @@ Context.setSourceRGBA = argcheck{
       end
 }
 
+Context.setSource = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="source", type="cairo.Pattern"},
+   call =
+      function(self, source)
+         C.cairo_set_source(self.C, source.C)
+      end
+}
+
 Context.setSourceSurface = argcheck{
    {name="self", type="cairo.Context"},
    {name="surface", type="cairo.Surface"},
@@ -120,12 +143,11 @@ Context.setSourceSurface = argcheck{
       end
 }
 
-Context.setTolerance = argcheck{
+Context.getSource = argcheck{
    {name="self", type="cairo.Context"},
-   {name="tolerance", type="number"},
    call =
-      function(self, tolerance)
-         C.cairo_set_tolerance(self.C, tolerance)
+      function(self)
+         return cairo.Pattern(C.cairo_get_source(self.C), true)
       end
 }
 
@@ -138,39 +160,11 @@ Context.setAntialias = argcheck{
       end
 }
 
-Context.setFillRule = argcheck{
+Context.getAntialias = argcheck{
    {name="self", type="cairo.Context"},
-   {name="fill_rule", type="string"},
    call =
-      function(self, fill_rule)
-         C.cairo_set_fill_rule(self.C, cairo.enums.FillRule[fill_rule])
-      end
-}
-
-Context.setLineWidth = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="width", type="number"},
-   call =
-      function(self, width)
-         C.cairo_set_line_width(self.C, width)
-      end
-}
-
-Context.setLineCap = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="line_cap", type="string"},
-   call =
-      function(self, line_cap)
-         C.cairo_set_line_cap(self.C, cairo.enums.LineCap[line_cap])
-      end
-}
-
-Context.setLineJoin = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="line_join", type="string"},
-   call =
-      function(self, line_join)
-         C.cairo_set_line_join(self.C, cairo.enums.LineJoin[line_join])
+      function(self)
+         return cairo.enums.Antialias[ tonumber(C.cairo_get_antialias(self.C)) ]
       end
 }
 
@@ -186,6 +180,98 @@ Context.setDash = argcheck{
       end
 }
 
+Context.getDashCount = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         return C.cairo_get_dash_count(self.C)
+      end
+}
+
+Context.getDash = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self, dashes, offset)
+         local n_dash = self:getDashCount()
+         local dashes_p = ffi.new('double[?]', n_dash)
+         local offset_p = ffi.new('double[1]')
+         C.cairo_get_dash(self.C, dashes_p, offset)
+         local dashes = {}
+         for i=0,n_dash-1 do
+            table.insert(dashes, dashes_p[i])
+         end
+         return dashes, offset
+      end
+}
+
+Context.setFillRule = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="fill_rule", type="string"},
+   call =
+      function(self, fill_rule)
+         C.cairo_set_fill_rule(self.C, cairo.enums.FillRule[fill_rule])
+      end
+}
+
+Context.getFillRule = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         return cairo.enums.FillRule[ tonumber(C.cairo_get_fill_rule(self.C)) ]
+      end
+}
+
+Context.setLineCap = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="line_cap", type="string"},
+   call =
+      function(self, line_cap)
+         C.cairo_set_line_cap(self.C, cairo.enums.LineCap[line_cap])
+      end
+}
+
+Context.getLineCap = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         return cairo.enums.LineCap[ tonumber(C.cairo_get_line_cap(self.C)) ]
+      end
+}
+
+Context.setLineJoin = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="line_join", type="string"},
+   call =
+      function(self, line_join)
+         C.cairo_set_line_join(self.C, cairo.enums.LineJoin[line_join])
+      end
+}
+
+Context.getLineJoin = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         return cairo.enums.LineJoin[ tonumber(C.cairo_get_line_join(self.C)) ]
+      end
+}
+
+Context.setLineWidth = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="width", type="number"},
+   call =
+      function(self, width)
+         C.cairo_set_line_width(self.C, width)
+      end
+}
+
+Context.getLineWidth = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         return C.cairo_get_line_width(self.C)
+      end
+}
+
 Context.setMiterLimit = argcheck{
    {name="self", type="cairo.Context"},
    {name="limit", type="number"},
@@ -194,6 +280,462 @@ Context.setMiterLimit = argcheck{
          C.cairo_set_miter_limit(self.C, limit)
       end
 }
+
+Context.getMiterLimit = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         return C.cairo_get_miter_limit(self.C)
+      end
+}
+
+Context.setOperator = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="op", type="string"},
+   call =
+      function(self, op)
+         C.cairo_set_operator(self.C, cairo.enums.Operator[op])
+      end
+}
+
+Context.getOperator = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         return cairo.enums.Operator[ tonumber(C.cairo_get_operator(self.C)) ]
+      end
+}
+
+Context.setTolerance = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="tolerance", type="number"},
+   call =
+      function(self, tolerance)
+         C.cairo_set_tolerance(self.C, tolerance)
+      end
+}
+
+Context.getTolerance = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         return C.cairo_get_tolerance(self.C)
+      end
+}
+
+Context.clip = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         C.cairo_clip(self.C)
+      end
+}
+
+Context.clipPreserve = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         C.cairo_clip_preserve(self.C)
+      end
+}
+
+Context.clipExtents = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         local x1 = ffi.new('double[1]')
+         local y1 = ffi.new('double[1]')
+         local x2 = ffi.new('double[1]')
+         local y2 = ffi.new('double[1]')
+         C.cairo_clip_extents(self.C, x1, y1, x2, y2)
+         return x1[0], y1[0], x2[0], y2[0]
+      end
+}
+
+Context.inClip = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="x", type="number"},
+   {name="y", type="number"},
+   call =
+      function(self, x, y)
+         return (C.cairo_in_clip(self.C, x, y) == 1)
+      end
+}
+
+Context.resetClip = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         C.cairo_reset_clip(self.C)
+      end
+}
+
+Context.copyClipRectangleList = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         local list_p = C.cairo_copy_clip_rectangle_list(self.C)
+         if list_p.status == ffi.CAIRO_STATUS_SUCCESS then
+            local list = {}
+            for i=1,list_p.num_rectangles do
+               table.insert(list, {
+                               x=list_p.rectangles[i-1].x, y=list_p.rectangles[i-1].y,
+                               width=list_p.rectangles[i-1].width, height=list_p.rectangles[i-1].height,
+                            })
+            end
+            return list
+         end
+      end
+}
+
+Context.fill = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         C.cairo_fill(self.C)
+      end
+}
+
+Context.fillPreserve = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         C.cairo_fill_preserve(self.C)
+      end
+}
+
+Context.fillExtents = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         local x1 = ffi.new('double[1]')
+         local y1 = ffi.new('double[1]')
+         local x2 = ffi.new('double[1]')
+         local y2 = ffi.new('double[1]')
+         C.cairo_fill_extents(self.C, x1, y1, x2, y2)
+         return x1[0], y1[0], x2[0], y2[0]
+      end
+}
+
+Context.inFill = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="x", type="number"},
+   {name="y", type="number"},
+   call =
+      function(self, x, y)
+         return (C.cairo_in_fill(self.C, x, y) == 1)
+      end
+}
+
+Context.mask = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="pattern", type="cairo.Pattern"},
+   call =
+      function(self, pattern)
+         C.cairo_mask(self.C, pattern.C)
+      end
+}
+
+Context.maskSurface = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="surface", type="cairo.Surface"},
+   {name="surface_x", type="number"},
+   {name="surface_y", type="number"},
+   call =
+      function(self, surface, surface_x, surface_y)
+         C.cairo_mask_surface(self.C, surface.C, surface_x, surface_y)
+      end
+}
+
+Context.paint = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         C.cairo_paint(self.C)
+      end
+}
+
+Context.paintWithAlpha = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="alpha", type="number"},
+   call =
+      function(self, alpha)
+         C.cairo_paint_with_alpha(self.C, alpha)
+      end
+}
+
+Context.stroke = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         C.cairo_stroke(self.C)
+      end
+}
+
+Context.strokePreserve = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         C.cairo_stroke_preserve(self.C)
+      end
+}
+
+Context.strokeExtents = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         local x1 = ffi.new('double[1]')
+         local y1 = ffi.new('double[1]')
+         local x2 = ffi.new('double[1]')
+         local y2 = ffi.new('double[1]')
+         C.cairo_stroke_extents(self.C, x1, y1, x2, y2)
+         return x1[0], y1[0], x2[0], y2[0]
+      end
+}
+
+Context.inStroke = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="x", type="number"},
+   {name="y", type="number"},
+   call =
+      function(self, x, y)
+         return (C.cairo_in_stroke(self.C, x, y) == 1)
+      end
+}
+
+Context.copyPage = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         C.cairo_copy_page(self.C)
+      end
+}
+
+Context.showPage = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         C.cairo_show_page(self.C)
+      end
+}
+
+doc[[
+
+### Paths
+
+]]
+
+Context.copyPath = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         return cairo.Path(C.cairo_copy_path(self.C))
+      end
+}
+
+Context.copyPathFlat = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         return cairo.Path(C.cairo_copy_path_flat(self.C))
+      end
+}
+
+Context.appendPath = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="path", type="cairo.Path"},
+   call =
+      function(self, path)
+         C.cairo_append_path(self.C, path.C)
+      end
+}
+
+Context.hasCurrentPoint = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         return (C.cairo_has_current_point(self.C) == 1)
+      end
+}
+
+Context.getCurrentPoint = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         local x = ffi.new('double[1]')
+         local y = ffi.new('double[1]')
+         C.cairo_get_current_point(self.C, x, y)
+         return x[0], y[0]
+      end
+}
+
+Context.newPath = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         C.cairo_new_path(self.C)
+      end
+}
+
+Context.newSubPath = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         C.cairo_new_sub_path(self.C)
+      end
+}
+
+Context.closePath = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         C.cairo_close_path(self.C)
+      end
+}
+
+Context.arc = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="xc", type="number"},
+   {name="yc", type="number"},
+   {name="radius", type="number"},
+   {name="angle1", type="number"},
+   {name="angle2", type="number"},
+   call =
+      function(self, xc, yc, radius, angle1, angle2)
+         C.cairo_arc(self.C, xc, yc, radius, angle1, angle2)
+      end
+}
+
+Context.arcNegative = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="xc", type="number"},
+   {name="yc", type="number"},
+   {name="radius", type="number"},
+   {name="angle1", type="number"},
+   {name="angle2", type="number"},
+   call =
+      function(self, xc, yc, radius, angle1, angle2)
+         C.cairo_arc_negative(self.C, xc, yc, radius, angle1, angle2)
+      end
+}
+
+Context.curveTo = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="x1", type="number"},
+   {name="y1", type="number"},
+   {name="x2", type="number"},
+   {name="y2", type="number"},
+   {name="x3", type="number"},
+   {name="y3", type="number"},
+   call =
+      function(self, x1, y1, x2, y2, x3, y3)
+         C.cairo_curve_to(self.C, x1, y1, x2, y2, x3, y3)
+      end
+}
+
+Context.lineTo = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="x", type="number"},
+   {name="y", type="number"},
+   call =
+      function(self, x, y)
+         C.cairo_line_to(self.C, x, y)
+      end
+}
+
+Context.moveTo = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="x", type="number"},
+   {name="y", type="number"},
+   call =
+      function(self, x, y)
+         C.cairo_move_to(self.C, x, y)
+      end
+}
+
+Context.rectangle = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="x", type="number"},
+   {name="y", type="number"},
+   {name="width", type="number"},
+   {name="height", type="number"},
+   call =
+      function(self, x, y, width, height)
+         C.cairo_rectangle(self.C, x, y, width, height)
+      end
+}
+
+Context.glyphPath = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="glyphs", type="table"},
+   call =
+      function(self, glyphs)
+         local glyphs_p, num_glyphs = utils.glyphs_lua2C(glyphs)
+         C.cairo_glyph_path(self.C, glyphs_p, num_glyphs)
+      end
+}
+
+Context.textPath = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="utf8", type="string"},
+   call =
+      function(self, utf8)
+         C.cairo_text_path(self.C, utf8)
+      end
+}
+
+Context.relCurveTo = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="dx1", type="number"},
+   {name="dy1", type="number"},
+   {name="dx2", type="number"},
+   {name="dy2", type="number"},
+   {name="dx3", type="number"},
+   {name="dy3", type="number"},
+   call =
+      function(self, dx1, dy1, dx2, dy2, dx3, dy3)
+         C.cairo_rel_curve_to(self.C, dx1, dy1, dx2, dy2, dx3, dy3)
+      end
+}
+
+Context.relLineTo = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="dx", type="number"},
+   {name="dy", type="number"},
+   call =
+      function(self, dx, dy)
+         C.cairo_rel_line_to(self.C, dx, dy)
+      end
+}
+
+Context.relMoveTo = argcheck{
+   {name="self", type="cairo.Context"},
+   {name="dx", type="number"},
+   {name="dy", type="number"},
+   call =
+      function(self, dx, dy)
+         C.cairo_rel_move_to(self.C, dx, dy)
+      end
+}
+
+Context.pathExtents = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         local x1 = ffi.new('double[1]')
+         local y1 = ffi.new('double[1]')
+         local x2 = ffi.new('double[1]')
+         local y2 = ffi.new('double[1]')
+         C.cairo_path_extents(self.C, x1, y1, x2, y2)
+         return x1[0], y1[0], x2[0], y2[0]
+      end
+}
+
+doc[[
+
+### Transformations
+
+]]
 
 Context.translate = argcheck{
    {name="self", type="cairo.Context"},
@@ -239,6 +781,16 @@ Context.setMatrix = argcheck{
    call =
       function(self, matrix)
          C.cairo_set_matrix(self.C, matrix.C)
+      end
+}
+
+Context.getMatrix = argcheck{
+   {name="self", type="cairo.Context"},
+   call =
+      function(self)
+         local matrix = cairo.Matrix()
+         C.cairo_get_matrix(self.C, matrix.C)
+         return matrix
       end
 }
 
@@ -294,344 +846,11 @@ Context.deviceToUserDistance = argcheck{
       end
 }
 
-Context.newPath = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         C.cairo_new_path(self.C)
-      end
-}
+doc[[
 
-Context.moveTo = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="x", type="number"},
-   {name="y", type="number"},
-   call =
-      function(self, x, y)
-         C.cairo_move_to(self.C, x, y)
-      end
-}
+### Rendering text and glyphs
 
-Context.newSubPath = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         C.cairo_new_sub_path(self.C)
-      end
-}
-
-Context.lineTo = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="x", type="number"},
-   {name="y", type="number"},
-   call =
-      function(self, x, y)
-         C.cairo_line_to(self.C, x, y)
-      end
-}
-
-Context.curveTo = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="x1", type="number"},
-   {name="y1", type="number"},
-   {name="x2", type="number"},
-   {name="y2", type="number"},
-   {name="x3", type="number"},
-   {name="y3", type="number"},
-   call =
-      function(self, x1, y1, x2, y2, x3, y3)
-         C.cairo_curve_to(self.C, x1, y1, x2, y2, x3, y3)
-      end
-}
-
-Context.arc = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="xc", type="number"},
-   {name="yc", type="number"},
-   {name="radius", type="number"},
-   {name="angle1", type="number"},
-   {name="angle2", type="number"},
-   call =
-      function(self, xc, yc, radius, angle1, angle2)
-         C.cairo_arc(self.C, xc, yc, radius, angle1, angle2)
-      end
-}
-
-Context.arcNegative = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="xc", type="number"},
-   {name="yc", type="number"},
-   {name="radius", type="number"},
-   {name="angle1", type="number"},
-   {name="angle2", type="number"},
-   call =
-      function(self, xc, yc, radius, angle1, angle2)
-         C.cairo_arc_negative(self.C, xc, yc, radius, angle1, angle2)
-      end
-}
-
-Context.relMoveTo = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="dx", type="number"},
-   {name="dy", type="number"},
-   call =
-      function(self, dx, dy)
-         C.cairo_rel_move_to(self.C, dx, dy)
-      end
-}
-
-Context.relLineTo = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="dx", type="number"},
-   {name="dy", type="number"},
-   call =
-      function(self, dx, dy)
-         C.cairo_rel_line_to(self.C, dx, dy)
-      end
-}
-
-Context.relCurveTo = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="dx1", type="number"},
-   {name="dy1", type="number"},
-   {name="dx2", type="number"},
-   {name="dy2", type="number"},
-   {name="dx3", type="number"},
-   {name="dy3", type="number"},
-   call =
-      function(self, dx1, dy1, dx2, dy2, dx3, dy3)
-         C.cairo_rel_curve_to(self.C, dx1, dy1, dx2, dy2, dx3, dy3)
-      end
-}
-
-Context.rectangle = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="x", type="number"},
-   {name="y", type="number"},
-   {name="width", type="number"},
-   {name="height", type="number"},
-   call =
-      function(self, x, y, width, height)
-         C.cairo_rectangle(self.C, x, y, width, height)
-      end
-}
-
-Context.closePath = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         C.cairo_close_path(self.C)
-      end
-}
-
-Context.pathExtents = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         local x1 = ffi.new('double[1]')
-         local y1 = ffi.new('double[1]')
-         local x2 = ffi.new('double[1]')
-         local y2 = ffi.new('double[1]')
-         C.cairo_path_extents(self.C, x1, y1, x2, y2)
-         return x1[0], y1[0], x2[0], y2[0]
-      end
-}
-
-Context.paint = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         C.cairo_paint(self.C)
-      end
-}
-
-Context.paintWithAlpha = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="alpha", type="number"},
-   call =
-      function(self, alpha)
-         C.cairo_paint_with_alpha(self.C, alpha)
-      end
-}
-
-Context.mask = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="pattern", type="cairo.Pattern"},
-   call =
-      function(self, pattern)
-         C.cairo_mask(self.C, pattern.C)
-      end
-}
-
-Context.maskSurface = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="surface", type="cairo.Surface"},
-   {name="surface_x", type="number"},
-   {name="surface_y", type="number"},
-   call =
-      function(self, surface, surface_x, surface_y)
-         C.cairo_mask_surface(self.C, surface.C, surface_x, surface_y)
-      end
-}
-
-Context.stroke = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         C.cairo_stroke(self.C)
-      end
-}
-
-Context.strokePreserve = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         C.cairo_stroke_preserve(self.C)
-      end
-}
-
-Context.fill = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         C.cairo_fill(self.C)
-      end
-}
-
-Context.fillPreserve = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         C.cairo_fill_preserve(self.C)
-      end
-}
-
-Context.copyPage = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         C.cairo_copy_page(self.C)
-      end
-}
-
-Context.showPage = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         C.cairo_show_page(self.C)
-      end
-}
-
-Context.inStroke = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="x", type="number"},
-   {name="y", type="number"},
-   call =
-      function(self, x, y)
-         return (C.cairo_in_stroke(self.C, x, y) == 1)
-      end
-}
-
-Context.inFill = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="x", type="number"},
-   {name="y", type="number"},
-   call =
-      function(self, x, y)
-         return (C.cairo_in_fill(self.C, x, y) == 1)
-      end
-}
-
-Context.inClip = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="x", type="number"},
-   {name="y", type="number"},
-   call =
-      function(self, x, y)
-         return (C.cairo_in_clip(self.C, x, y) == 1)
-      end
-}
-
-Context.strokeExtents = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         local x1 = ffi.new('double[1]')
-         local y1 = ffi.new('double[1]')
-         local x2 = ffi.new('double[1]')
-         local y2 = ffi.new('double[1]')
-         C.cairo_stroke_extents(self.C, x1, y1, x2, y2)
-         return x1[0], y1[0], x2[0], y2[0]
-      end
-}
-
-Context.fillExtents = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         local x1 = ffi.new('double[1]')
-         local y1 = ffi.new('double[1]')
-         local x2 = ffi.new('double[1]')
-         local y2 = ffi.new('double[1]')
-         C.cairo_fill_extents(self.C, x1, y1, x2, y2)
-         return x1[0], y1[0], x2[0], y2[0]
-      end
-}
-
-Context.resetClip = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         C.cairo_reset_clip(self.C)
-      end
-}
-
-Context.clip = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         C.cairo_clip(self.C)
-      end
-}
-
-Context.clipPreserve = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         C.cairo_clip_preserve(self.C)
-      end
-}
-
-Context.clipExtents = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         local x1 = ffi.new('double[1]')
-         local y1 = ffi.new('double[1]')
-         local x2 = ffi.new('double[1]')
-         local y2 = ffi.new('double[1]')
-         C.cairo_clip_extents(self.C, x1, y1, x2, y2)
-         return x1[0], y1[0], x2[0], y2[0]
-      end
-}
-
-Context.copyClipRectangleList = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         local list_p = C.cairo_copy_clip_rectangle_list(self.C)
-         if list_p.status == ffi.CAIRO_STATUS_SUCCESS then
-            local list = {}
-            for i=1,list_p.num_rectangles do
-               table.insert(list, {
-                               x=list_p.rectangles[i-1].x, y=list_p.rectangles[i-1].y,
-                               width=list_p.rectangles[i-1].width, height=list_p.rectangles[i-1].height,
-                            })
-            end
-            return list
-         end
-      end
-}
+]]
 
 Context.selectFontFace = argcheck{
    {name="self", type="cairo.Context"},
@@ -759,22 +978,17 @@ Context.showTextGlyphs = argcheck{
       end
 }
 
-Context.textPath = argcheck{
+Context.fontExtents = argcheck{
    {name="self", type="cairo.Context"},
-   {name="utf8", type="string"},
    call =
-      function(self, utf8)
-         C.cairo_text_path(self.C, utf8)
-      end
-}
-
-Context.glyphPath = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="glyphs", type="table"},
-   call =
-      function(self, glyphs)
-         local glyphs_p, num_glyphs = utils.glyphs_lua2C(glyphs)
-         C.cairo_glyph_path(self.C, glyphs_p, num_glyphs)
+      function(self)
+         local extents = ffi.new('cairo_font_extents_t')
+         C.cairo_font_extents(self.C, extents)
+         return {
+            ascent=extents.ascent, descent=extents.descent,
+            height=extents.height,
+            max_x_advance=extents.max_x_advance, max_y_advance=extents.max_y_advance
+         }
       end
 }
 
@@ -806,193 +1020,5 @@ Context.glyphExtents = argcheck{
             width=extents.width, height=extents.height,
             x_advance=extents.x_advance, y_advance=extents.y_advance
          }
-      end
-}
-
-Context.fontExtents = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         local extents = ffi.new('cairo_font_extents_t')
-         C.cairo_font_extents(self.C, extents)
-         return {
-            ascent=extents.ascent, descent=extents.descent,
-            height=extents.height,
-            max_x_advance=extents.max_x_advance, max_y_advance=extents.max_y_advance
-         }
-      end
-}
-
-Context.getOperator = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return cairo.enums.Operator[ tonumber(C.cairo_get_operator(self.C)) ]
-      end
-}
-
-Context.getSource = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return cairo.Pattern(C.cairo_get_source(self.C), true)
-      end
-}
-
-Context.getTolerance = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return C.cairo_get_tolerance(self.C)
-      end
-}
-
-Context.getAntialias = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return cairo.enums.Antialias[ tonumber(C.cairo_get_antialias(self.C)) ]
-      end
-}
-
-Context.hasCurrentPoint = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return (C.cairo_has_current_point(self.C) == 1)
-      end
-}
-
-Context.getCurrentPoint = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         local x = ffi.new('double[1]')
-         local y = ffi.new('double[1]')
-         C.cairo_get_current_point(self.C, x, y)
-         return x[0], y[0]
-      end
-}
-
-Context.getFillRule = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return cairo.enums.FillRule[ tonumber(C.cairo_get_fill_rule(self.C)) ]
-      end
-}
-
-Context.getLineWidth = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return C.cairo_get_line_width(self.C)
-      end
-}
-
-Context.getLineCap = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return cairo.enums.LineCap[ tonumber(C.cairo_get_line_cap(self.C)) ]
-      end
-}
-
-Context.getLineJoin = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return cairo.enums.LineJoin[ tonumber(C.cairo_get_line_join(self.C)) ]
-      end
-}
-
-Context.getMiterLimit = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return C.cairo_get_miter_limit(self.C)
-      end
-}
-
-Context.getDashCount = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return C.cairo_get_dash_count(self.C)
-      end
-}
-
-Context.getDash = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self, dashes, offset)
-         local n_dash = self:getDashCount()
-         local dashes_p = ffi.new('double[?]', n_dash)
-         local offset_p = ffi.new('double[1]')
-         C.cairo_get_dash(self.C, dashes_p, offset)
-         local dashes = {}
-         for i=0,n_dash-1 do
-            table.insert(dashes, dashes_p[i])
-         end
-         return dashes, offset
-      end
-}
-
-Context.getMatrix = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         local matrix = cairo.Matrix()
-         C.cairo_get_matrix(self.C, matrix.C)
-         return matrix
-      end
-}
-
-Context.getTarget = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return cairo.Surface(C.cairo_get_target(self.C), true)
-      end
-}
-
-Context.getGroupTarget = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return cairo.Surface(C.cairo_get_group_target(self.C), true)
-      end
-}
-
-Context.copyPath = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return cairo.Path(C.cairo_copy_path(self.C))
-      end
-}
-
-Context.copyPathFlat = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return cairo.Path(C.cairo_copy_path_flat(self.C))
-      end
-}
-
-Context.appendPath = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="path", type="cairo.Path"},
-   call =
-      function(self, path)
-         C.cairo_append_path(self.C, path.C)
-      end
-}
-
-Context.status = argcheck{
-   {name="self", type="cairo.Context"},
-   call =
-      function(self)
-         return cairo.enums.Status[ tonumber(C.cairo_status(self.C)) ]
       end
 }
