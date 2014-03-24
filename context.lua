@@ -16,6 +16,34 @@ doc[[
 ]]
 
 Context.__init = argcheck{
+   doc = [[
+<a name="Context.new">
+#### Context.new(@ARGP)
+
+@ARGT
+
+Creates a new [`Context`](#Context) with all graphics state parameters set to
+default values and with `target` as a target surface. The target
+surface should be constructed with a backend-specific function such
+as [`ImageSurface.new()`](imagesurface.md#ImageSurface.new) (or any other
+Cairo image surface backend variant).
+
+This function references `target`, so you can immediately
+call [`Surface.destroy()`](surface.md#Surface.destroy) on it if you don't need to
+maintain a separate reference to it.
+
+_Return value_: a newly allocated [`Context`](#Context) with a reference
+count of 1. The initial reference count should be released
+with [`Context.destroy()`](#Context.destroy) when you are done using the [`Context`](#Context).
+This function never returns `nil`. If memory cannot be
+allocated, a special [`Context`](#Context) object will be returned on
+which [`Context.status()`](#Context.status) returns [`"no-memory"`](enums.md#Status). If
+you attempt to target a surface which does not support
+writing (such as [`MimeSurface`](mimesurface.md#MimeSurface)) then a
+[`"write-error"`](enums.md#Status) will be raised.  You can use this
+object normally, but no drawing will be done.
+
+]],
    {name="self", type="cairo.Context"},
    {name="surface", type="cairo.Surface"},
    call =
@@ -30,7 +58,9 @@ Context.__init = argcheck{
 Context.status = argcheck{
    doc = [[
 <a name="Context.status">
-#### Context.status()
+#### Context.status(@ARGP)
+
+@ARGT
 
 Checks whether an error has previously occurred for this context.
 
@@ -47,7 +77,9 @@ _Returns_: the current status of this context, see [`Status`](enums.md#Status)
 Context.save = argcheck{
    doc = [[
 <a name="Context.save">
-#### Context.save()
+#### Context.save(@ARGP)
+
+@ARGT
 
 Makes a copy of the current state of `cr` and saves it
 on an internal stack of saved states for `cr`. When
@@ -72,7 +104,9 @@ any saved states will be freed along with the [`Context`](#Context).
 Context.restore = argcheck{
    doc = [[
 <a name="Context.restore">
-#### Context.restore()
+#### Context.restore(@ARGP)
+
+@ARGT
 
 Restores `cr` to the state saved by a preceding call to
 [`Context.save()`](#Context.save) and removes that state from the stack of
@@ -89,7 +123,9 @@ saved states.
 Context.getTarget = argcheck{
    doc = [[
 <a name="Context.getTarget">
-#### Context.getTarget()
+#### Context.getTarget(@ARGP)
+
+@ARGT
 
 Gets the target surface for the cairo context as passed to
 [`Context.new()`](#Context.new).
@@ -114,7 +150,9 @@ keep a reference to it, you must call [`Surface.reference()`](surface.md#Surface
 Context.pushGroup = argcheck{
    doc = [[
 <a name="Context.pushGroup">
-#### Context.pushGroup()
+#### Context.pushGroup(@ARGP)
+
+@ARGT
 
 Temporarily redirects drawing to an intermediate surface known as a
 group. The redirection lasts until the group is completed by a call
@@ -165,7 +203,9 @@ cairo_paint_with_alpha (cr, alpha);
 Context.pushGroupWithContent = argcheck{
    doc = [[
 <a name="Context.pushGroupWithContent">
-#### Context.pushGroupWithContent()
+#### Context.pushGroupWithContent(@ARGP)
+
+@ARGT
 
 Temporarily redirects drawing to an intermediate surface known as a
 group. The redirection lasts until the group is completed by a call
@@ -190,7 +230,9 @@ detailed description of group rendering.
 Context.popGroup = argcheck{
    doc = [[
 <a name="Context.popGroup">
-#### Context.popGroup()
+#### Context.popGroup(@ARGP)
+
+@ARGT
 
 Terminates the redirection begun by a call to [`Context.pushGroup()`](#Context.pushGroup) or
 [`Context.pushGroupWithContent()`](#Context.pushGroupWithContent) and returns a new pattern
@@ -218,7 +260,9 @@ caller owns the returned object and should call
 Context.popGroupToSource = argcheck{
    doc = [[
 <a name="Context.popGroupToSource">
-#### Context.popGroupToSource()
+#### Context.popGroupToSource(@ARGP)
+
+@ARGT
 
 Terminates the redirection begun by a call to [`Context.pushGroup()`](#Context.pushGroup) or
 [`Context.pushGroupWithContent()`](#Context.pushGroupWithContent) and installs the resulting pattern
@@ -252,7 +296,9 @@ group.
 Context.getGroupTarget = argcheck{
    doc = [[
 <a name="Context.getGroupTarget">
-#### Context.getGroupTarget()
+#### Context.getGroupTarget(@ARGP)
+
+@ARGT
 
 Gets the current destination surface for the context. This is either
 the original target surface as passed to [`Context.new()`](#Context.new) or the target
@@ -277,10 +323,28 @@ keep a reference to it, you must call [`Surface.reference()`](surface.md#Surface
 }
 
 Context.setSourceRGB = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="red", type="number"},
-   {name="green", type="number"},
-   {name="blue", type="number"},
+   doc = [[
+<a name="Context.setSourceRGB">
+#### Context.setSourceRGB(@ARGP)
+
+@ARGT
+
+Sets the source pattern within `cr` to an opaque color. This opaque
+color will then be used for any subsequent drawing operation until
+a new source pattern is set.
+
+The color components are floating point numbers in the range 0 to
+1. If the values passed in are outside that range, they will be
+clamped.
+
+The default source pattern is opaque black, (that is, it is
+equivalent to cairo_set_source_rgb(cr, 0.0, 0.0, 0.0)).
+
+]],
+   {name="self", type="cairo.Context", doc="a cairo context"},
+   {name="red", type="number", doc="red component of color"},
+   {name="green", type="number", doc="green component of color"},
+   {name="blue", type="number", doc="blue component of color"},
    call =
       function(self, red, green, blue)
          C.cairo_set_source_rgb(self.C, red, green, blue)
@@ -288,11 +352,29 @@ Context.setSourceRGB = argcheck{
 }
 
 Context.setSourceRGBA = argcheck{
-   {name="self", type="cairo.Context"},
-   {name="red", type="number"},
-   {name="green", type="number"},
-   {name="blue", type="number"},
-   {name="alpha", type="number"},
+   doc = [[
+<a name="Context.setSourceRGBA">
+#### Context.setSourceRGBA(@ARGP)
+
+@ARGT
+
+Sets the source pattern within `cr` to a translucent color. This
+color will then be used for any subsequent drawing operation until
+a new source pattern is set.
+
+The color and alpha components are floating point numbers in the
+range 0 to 1. If the values passed in are outside that range, they
+will be clamped.
+
+The default source pattern is opaque black, (that is, it is
+equivalent to cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 1.0)).
+
+]],
+   {name="self", type="cairo.Context", doc="a cairo context"},
+   {name="red", type="number", doc="red component of color"},
+   {name="green", type="number", doc="green component of color"},
+   {name="blue", type="number", doc="blue component of color"},
+   {name="alpha", type="number", doc="alpha component of color"},
    call =
       function(self, red, green, blue, alpha)
          C.cairo_set_source_rgba(self.C, red, green, blue, alpha)
@@ -302,7 +384,9 @@ Context.setSourceRGBA = argcheck{
 Context.setSource = argcheck{
    doc = [[
 <a name="Context.setSource">
-#### Context.setSource()
+#### Context.setSource(@ARGP)
+
+@ARGT
 
 Sets the source pattern within `cr` to `source`. This pattern
 will then be used for any subsequent drawing operation until a new
@@ -329,7 +413,9 @@ The default source pattern is a solid pattern that is opaque black,
 Context.setSourceSurface = argcheck{
    doc = [[
 <a name="Context.setSourceSurface">
-#### Context.setSourceSurface()
+#### Context.setSourceSurface(@ARGP)
+
+@ARGT
 
 This is a convenience function for creating a pattern from `surface`
 and setting it as the source in `cr` with [`Context.setSource()`](#Context.setSource).
@@ -361,7 +447,9 @@ repeating pattern with [`Pattern.setExtend()`](pattern.md#Pattern.setExtend)).
 Context.getSource = argcheck{
    doc = [[
 <a name="Context.getSource">
-#### Context.getSource()
+#### Context.getSource(@ARGP)
+
+@ARGT
 
 Gets the current source pattern for `cr`.
 
@@ -380,7 +468,9 @@ cairo. To keep a reference to it, you must call
 Context.setAntialias = argcheck{
    doc = [[
 <a name="Context.setAntialias">
-#### Context.setAntialias()
+#### Context.setAntialias(@ARGP)
+
+@ARGT
 
 Set the antialiasing mode of the rasterizer used for drawing shapes.
 This value is a hint, and a particular backend may or may not support
@@ -402,7 +492,9 @@ Note that this option does not affect text rendering, instead see
 Context.getAntialias = argcheck{
    doc = [[
 <a name="Context.getAntialias">
-#### Context.getAntialias()
+#### Context.getAntialias(@ARGP)
+
+@ARGT
 
 Gets the current shape antialiasing mode, as set by
 [`Context.setAntialias()`](#Context.setAntialias).
@@ -420,7 +512,9 @@ _Return value_: the current shape antialiasing mode.
 Context.setDash = argcheck{
    doc = [[
 <a name="Context.setDash">
-#### Context.setDash()
+#### Context.setDash(@ARGP)
+
+@ARGT
 
 Sets the dash pattern to be used by [`Context.stroke()`](#Context.stroke). A dash pattern
 is specified by `dashes`, an array of positive values. Each value
@@ -462,7 +556,9 @@ If any value in `dashes` is negative, or if all values are 0, then
 Context.getDashCount = argcheck{
    doc = [[
 <a name="Context.getDashCount">
-#### Context.getDashCount()
+#### Context.getDashCount(@ARGP)
+
+@ARGT
 
 This function returns the length of the dash array in `cr` (0 if dashing
 is not currently in effect).
@@ -482,7 +578,9 @@ _Return value_: the length of the dash array, or 0 if no dash array set.
 Context.getDash = argcheck{
    doc = [[
 <a name="Context.getDash">
-#### Context.getDash()
+#### Context.getDash(@ARGP)
+
+@ARGT
 
 Gets the current dash array.  If not `nil`, `dashes` should be big
 enough to hold at least the number of values returned by
@@ -507,7 +605,9 @@ enough to hold at least the number of values returned by
 Context.setFillRule = argcheck{
    doc = [[
 <a name="Context.setFillRule">
-#### Context.setFillRule()
+#### Context.setFillRule(@ARGP)
+
+@ARGT
 
 Set the current fill rule within the cairo context. The fill rule
 is used to determine which regions are inside or outside a complex
@@ -529,7 +629,9 @@ The default fill rule is [`"winding"`](enums.md#FillRule).
 Context.getFillRule = argcheck{
    doc = [[
 <a name="Context.getFillRule">
-#### Context.getFillRule()
+#### Context.getFillRule(@ARGP)
+
+@ARGT
 
 Gets the current fill rule, as set by [`Context.setFillRule()`](#Context.setFillRule).
 
@@ -546,7 +648,9 @@ _Return value_: the current fill rule.
 Context.setLineCap = argcheck{
    doc = [[
 <a name="Context.setLineCap">
-#### Context.setLineCap()
+#### Context.setLineCap(@ARGP)
+
+@ARGT
 
 Sets the current line cap style within the cairo context. See
 [`LineCap`](enums.md#LineCap) for details about how the available line cap
@@ -571,7 +675,9 @@ The default line cap style is [`"butt"`](enums.md#LineCap).
 Context.getLineCap = argcheck{
    doc = [[
 <a name="Context.getLineCap">
-#### Context.getLineCap()
+#### Context.getLineCap(@ARGP)
+
+@ARGT
 
 Gets the current line cap style, as set by [`Context.setLineCap()`](#Context.setLineCap).
 
@@ -588,7 +694,9 @@ _Return value_: the current line cap style.
 Context.setLineJoin = argcheck{
    doc = [[
 <a name="Context.setLineJoin">
-#### Context.setLineJoin()
+#### Context.setLineJoin(@ARGP)
+
+@ARGT
 
 Sets the current line join style within the cairo context. See
 [`LineJoin`](enums.md#LineJoin) for details about how the available line join
@@ -613,7 +721,9 @@ The default line join style is [`"miter"`](enums.md#LineJoin).
 Context.getLineJoin = argcheck{
    doc = [[
 <a name="Context.getLineJoin">
-#### Context.getLineJoin()
+#### Context.getLineJoin(@ARGP)
+
+@ARGT
 
 Gets the current line join style, as set by [`Context.setLineJoin()`](#Context.setLineJoin).
 
@@ -630,7 +740,9 @@ _Return value_: the current line join style.
 Context.setLineWidth = argcheck{
    doc = [[
 <a name="Context.setLineWidth">
-#### Context.setLineWidth()
+#### Context.setLineWidth(@ARGP)
+
+@ARGT
 
 Sets the current line width within the cairo context. The line
 width value specifies the diameter of a pen that is circular in
@@ -665,7 +777,9 @@ The default line width value is 2.0.
 Context.getLineWidth = argcheck{
    doc = [[
 <a name="Context.getLineWidth">
-#### Context.getLineWidth()
+#### Context.getLineWidth(@ARGP)
+
+@ARGT
 
 This function returns the current line width value exactly as set by
 [`Context.setLineWidth()`](#Context.setLineWidth). Note that the value is unchanged even if
@@ -685,7 +799,9 @@ _Return value_: the current line width.
 Context.setMiterLimit = argcheck{
    doc = [[
 <a name="Context.setMiterLimit">
-#### Context.setMiterLimit()
+#### Context.setMiterLimit(@ARGP)
+
+@ARGT
 
 Sets the current miter limit within the cairo context.
 
@@ -722,7 +838,9 @@ A miter limit for a desired angle can be computed as: miter limit =
 Context.getMiterLimit = argcheck{
    doc = [[
 <a name="Context.getMiterLimit">
-#### Context.getMiterLimit()
+#### Context.getMiterLimit(@ARGP)
+
+@ARGT
 
 Gets the current miter limit, as set by [`Context.setMiterLimit()`](#Context.setMiterLimit).
 
@@ -739,7 +857,9 @@ _Return value_: the current miter limit.
 Context.setOperator = argcheck{
    doc = [[
 <a name="Context.setOperator">
-#### Context.setOperator()
+#### Context.setOperator(@ARGP)
+
+@ARGT
 
 Sets the compositing operator to be used for all drawing
 operations. See [`Operator`](enums.md#Operator) for details on the semantics of
@@ -759,7 +879,9 @@ The default operator is [`"over"`](enums.md#Operator).
 Context.getOperator = argcheck{
    doc = [[
 <a name="Context.getOperator">
-#### Context.getOperator()
+#### Context.getOperator(@ARGP)
+
+@ARGT
 
 Gets the current compositing operator for a cairo context.
 
@@ -776,7 +898,9 @@ _Return value_: the current compositing operator.
 Context.setTolerance = argcheck{
    doc = [[
 <a name="Context.setTolerance">
-#### Context.setTolerance()
+#### Context.setTolerance(@ARGP)
+
+@ARGT
 
 Sets the tolerance used when converting paths into trapezoids.
 Curved segments of the path will be subdivided until the maximum
@@ -801,7 +925,9 @@ representable internal value.
 Context.getTolerance = argcheck{
    doc = [[
 <a name="Context.getTolerance">
-#### Context.getTolerance()
+#### Context.getTolerance(@ARGP)
+
+@ARGT
 
 Gets the current tolerance value, as set by [`Context.setTolerance()`](#Context.setTolerance).
 
@@ -818,7 +944,9 @@ _Return value_: the current tolerance value.
 Context.clip = argcheck{
    doc = [[
 <a name="Context.clip">
-#### Context.clip()
+#### Context.clip(@ARGP)
+
+@ARGT
 
 Establishes a new clip region by intersecting the current clip
 region with the current path as it would be filled by [`Context.fill()`](#Context.fill)
@@ -849,7 +977,9 @@ region is [`Context.resetClip()`](#Context.resetClip).
 Context.clipPreserve = argcheck{
    doc = [[
 <a name="Context.clipPreserve">
-#### Context.clipPreserve()
+#### Context.clipPreserve(@ARGP)
+
+@ARGT
 
 Establishes a new clip region by intersecting the current clip
 region with the current path as it would be filled by [`Context.fill()`](#Context.fill)
@@ -880,7 +1010,9 @@ region is [`Context.resetClip()`](#Context.resetClip).
 Context.clipExtents = argcheck{
    doc = [[
 <a name="Context.clipExtents">
-#### Context.clipExtents()
+#### Context.clipExtents(@ARGP)
+
+@ARGT
 
 Computes a bounding box in user coordinates covering the area inside the
 current clip.
@@ -901,7 +1033,9 @@ current clip.
 Context.inClip = argcheck{
    doc = [[
 <a name="Context.inClip">
-#### Context.inClip()
+#### Context.inClip(@ARGP)
+
+@ARGT
 
 Tests whether the given point is inside the area that would be
 visible through the current clip, i.e. the area that would be filled by
@@ -925,7 +1059,9 @@ outside.
 Context.resetClip = argcheck{
    doc = [[
 <a name="Context.resetClip">
-#### Context.resetClip()
+#### Context.resetClip(@ARGP)
+
+@ARGT
 
 Reset the current clip region to its original, unrestricted
 state. That is, set the clip region to an infinitely large shape
@@ -950,7 +1086,9 @@ robust means of temporarily restricting the clip region.
 Context.copyClipRectangleList = argcheck{
    doc = [[
 <a name="Context.copyClipRectangleList">
-#### Context.copyClipRectangleList()
+#### Context.copyClipRectangleList(@ARGP)
+
+@ARGT
 
 Gets the current clip region as a list of rectangles in user coordinates.
 Never returns `nil`.
@@ -984,7 +1122,9 @@ which should be destroyed using [`Context.rectangleListDestroy()`](#Context.rect
 Context.fill = argcheck{
    doc = [[
 <a name="Context.fill">
-#### Context.fill()
+#### Context.fill(@ARGP)
+
+@ARGT
 
 A drawing operator that fills the current path according to the
 current fill rule, (each sub-path is implicitly closed before being
@@ -1003,7 +1143,9 @@ the cairo context. See [`Context.setFillRule()`](#Context.setFillRule) and
 Context.fillPreserve = argcheck{
    doc = [[
 <a name="Context.fillPreserve">
-#### Context.fillPreserve()
+#### Context.fillPreserve(@ARGP)
+
+@ARGT
 
 A drawing operator that fills the current path according to the
 current fill rule, (each sub-path is implicitly closed before being
@@ -1023,7 +1165,9 @@ See [`Context.setFillRule()`](#Context.setFillRule) and [`Context.fill()`](#Cont
 Context.fillExtents = argcheck{
    doc = [[
 <a name="Context.fillExtents">
-#### Context.fillExtents()
+#### Context.fillExtents(@ARGP)
+
+@ARGT
 
 Computes a bounding box in user coordinates covering the area that
 would be affected, (the "inked" area), by a [`Context.fill()`](#Context.fill) operation
@@ -1058,7 +1202,9 @@ See [`Context.fill()`](#Context.fill), [`Context.setFillRule()`](#Context.setFil
 Context.inFill = argcheck{
    doc = [[
 <a name="Context.inFill">
-#### Context.inFill()
+#### Context.inFill(@ARGP)
+
+@ARGT
 
 Tests whether the given point is inside the area that would be
 affected by a [`Context.fill()`](#Context.fill) operation given the current path and
@@ -1083,7 +1229,9 @@ outside.
 Context.mask = argcheck{
    doc = [[
 <a name="Context.mask">
-#### Context.mask()
+#### Context.mask(@ARGP)
+
+@ARGT
 
 A drawing operator that paints the current source
 using the alpha channel of `pattern` as a mask. (Opaque
@@ -1102,7 +1250,9 @@ areas are not painted.)
 Context.maskSurface = argcheck{
    doc = [[
 <a name="Context.maskSurface">
-#### Context.maskSurface()
+#### Context.maskSurface(@ARGP)
+
+@ARGT
 
 A drawing operator that paints the current source
 using the alpha channel of `surface` as a mask. (Opaque
@@ -1123,7 +1273,9 @@ areas are not painted.)
 Context.paint = argcheck{
    doc = [[
 <a name="Context.paint">
-#### Context.paint()
+#### Context.paint(@ARGP)
+
+@ARGT
 
 A drawing operator that paints the current source everywhere within
 the current clip region.
@@ -1139,7 +1291,9 @@ the current clip region.
 Context.paintWithAlpha = argcheck{
    doc = [[
 <a name="Context.paintWithAlpha">
-#### Context.paintWithAlpha()
+#### Context.paintWithAlpha(@ARGP)
+
+@ARGT
 
 A drawing operator that paints the current source everywhere within
 the current clip region using a mask of constant alpha value
@@ -1158,7 +1312,9 @@ is faded out using the alpha value.
 Context.stroke = argcheck{
    doc = [[
 <a name="Context.stroke">
-#### Context.stroke()
+#### Context.stroke(@ARGP)
+
+@ARGT
 
 A drawing operator that strokes the current path according to the
 current line width, line join, line cap, and dash settings. After
@@ -1199,7 +1355,9 @@ to be drawn in the case of either degenerate segments or sub-paths.
 Context.strokePreserve = argcheck{
    doc = [[
 <a name="Context.strokePreserve">
-#### Context.strokePreserve()
+#### Context.strokePreserve(@ARGP)
+
+@ARGT
 
 A drawing operator that strokes the current path according to the
 current line width, line join, line cap, and dash settings. Unlike
@@ -1221,7 +1379,9 @@ See [`Context.setLineWidth()`](#Context.setLineWidth), [`Context.setLineJoin()`]
 Context.strokeExtents = argcheck{
    doc = [[
 <a name="Context.strokeExtents">
-#### Context.strokeExtents()
+#### Context.strokeExtents(@ARGP)
+
+@ARGT
 
 Computes a bounding box in user coordinates covering the area that
 would be affected, (the "inked" area), by a [`Context.stroke()`](#Context.stroke)
@@ -1259,7 +1419,9 @@ See [`Context.stroke()`](#Context.stroke), [`Context.setLineWidth()`](#Context.s
 Context.inStroke = argcheck{
    doc = [[
 <a name="Context.inStroke">
-#### Context.inStroke()
+#### Context.inStroke(@ARGP)
+
+@ARGT
 
 Tests whether the given point is inside the area that would be
 affected by a [`Context.stroke()`](#Context.stroke) operation given the current path and
@@ -1286,7 +1448,9 @@ outside.
 Context.copyPage = argcheck{
    doc = [[
 <a name="Context.copyPage">
-#### Context.copyPage()
+#### Context.copyPage(@ARGP)
+
+@ARGT
 
 Emits the current page for backends that support multiple pages, but
 doesn't clear it, so, the contents of the current page will be retained
@@ -1307,7 +1471,9 @@ This is a convenience function that simply calls
 Context.showPage = argcheck{
    doc = [[
 <a name="Context.showPage">
-#### Context.showPage()
+#### Context.showPage(@ARGP)
+
+@ARGT
 
 Emits and clears the current page for backends that support multiple
 pages.  Use [`Context.copyPage()`](#Context.copyPage) if you don't want to clear the page.
@@ -1332,7 +1498,9 @@ doc[[
 Context.copyPath = argcheck{
    doc = [[
 <a name="Context.copyPath">
-#### Context.copyPath()
+#### Context.copyPath(@ARGP)
+
+@ARGT
 
 Creates a copy of the current path and returns it to the user as a
 [`Path`](path.md#Path). See [`cairo_path_data_t`](#cairo_path_data_t) for hints on how to iterate
@@ -1367,7 +1535,9 @@ with it.
 Context.copyPathFlat = argcheck{
    doc = [[
 <a name="Context.copyPathFlat">
-#### Context.copyPathFlat()
+#### Context.copyPathFlat(@ARGP)
+
+@ARGT
 
 Gets a flattened copy of the current path and returns it to the
 user as a [`Path`](path.md#Path). See [`cairo_path_data_t`](#cairo_path_data_t) for hints on
@@ -1409,7 +1579,9 @@ with it.
 Context.appendPath = argcheck{
    doc = [[
 <a name="Context.appendPath">
-#### Context.appendPath()
+#### Context.appendPath(@ARGP)
+
+@ARGT
 
 Append the `path` onto the current path. The `path` may be either the
 return value from one of [`Context.copyPath()`](#Context.copyPath) or
@@ -1430,7 +1602,9 @@ initialized to [`"success"`](enums.md#Status).
 Context.hasCurrentPoint = argcheck{
    doc = [[
 <a name="Context.hasCurrentPoint">
-#### Context.hasCurrentPoint()
+#### Context.hasCurrentPoint(@ARGP)
+
+@ARGT
 
 Returns whether a current point is defined on the current path.
 See [`Context.getCurrentPoint()`](#Context.getCurrentPoint) for details on the current point.
@@ -1448,7 +1622,9 @@ _Return value_: whether a current point is defined.
 Context.getCurrentPoint = argcheck{
    doc = [[
 <a name="Context.getCurrentPoint">
-#### Context.getCurrentPoint()
+#### Context.getCurrentPoint(@ARGP)
+
+@ARGT
 
 Gets the current point of the current path, which is
 conceptually the final point reached by the path so far.
@@ -1488,7 +1664,9 @@ Some functions unset the current path and as a result, current point:
 Context.newPath = argcheck{
    doc = [[
 <a name="Context.newPath">
-#### Context.newPath()
+#### Context.newPath(@ARGP)
+
+@ARGT
 
 Clears the current path. After this call there will be no path and
 no current point.
@@ -1504,7 +1682,9 @@ no current point.
 Context.newSubPath = argcheck{
    doc = [[
 <a name="Context.newSubPath">
-#### Context.newSubPath()
+#### Context.newSubPath(@ARGP)
+
+@ARGT
 
 Begin a new sub-path. Note that the existing path is not
 affected. After this call there will be no current point.
@@ -1529,7 +1709,9 @@ compute the arc's initial coordinates for a call to
 Context.closePath = argcheck{
    doc = [[
 <a name="Context.closePath">
-#### Context.closePath()
+#### Context.closePath(@ARGP)
+
+@ARGT
 
 Adds a line segment to the path from the current point to the
 beginning of the current sub-path, (the most recent point passed to
@@ -1564,7 +1746,9 @@ point.
 Context.arc = argcheck{
    doc = [[
 <a name="Context.arc">
-#### Context.arc()
+#### Context.arc(@ARGP)
+
+@ARGT
 
 Adds a circular arc of the given `radius` to the current path.  The
 arc is centered at (`xc`, `yc`), begins at `angle1` and proceeds in
@@ -1620,7 +1804,9 @@ cairo_restore (cr);
 Context.arcNegative = argcheck{
    doc = [[
 <a name="Context.arcNegative">
-#### Context.arcNegative()
+#### Context.arcNegative(@ARGP)
+
+@ARGT
 
 Adds a circular arc of the given `radius` to the current path.  The
 arc is centered at (`xc`, `yc`), begins at `angle1` and proceeds in
@@ -1647,7 +1833,9 @@ direction of the arc between the two angles.
 Context.curveTo = argcheck{
    doc = [[
 <a name="Context.curveTo">
-#### Context.curveTo()
+#### Context.curveTo(@ARGP)
+
+@ARGT
 
 Adds a cubic Bézier spline to the path from the current point to
 position (`x3`, `y3`) in user-space coordinates, using (`x1`, `y1`) and
@@ -1675,7 +1863,9 @@ cairo_move_to(`cr`, `x1`, `y1`).
 Context.lineTo = argcheck{
    doc = [[
 <a name="Context.lineTo">
-#### Context.lineTo()
+#### Context.lineTo(@ARGP)
+
+@ARGT
 
 Adds a line to the path from the current point to position (`x`, `y`)
 in user-space coordinates. After this call the current point
@@ -1697,7 +1887,9 @@ this function will behave as cairo_move_to(`cr`, `x`, `y`).
 Context.moveTo = argcheck{
    doc = [[
 <a name="Context.moveTo">
-#### Context.moveTo()
+#### Context.moveTo(@ARGP)
+
+@ARGT
 
 Begin a new sub-path. After this call the current point will be (`x`,
 `y`).
@@ -1715,7 +1907,9 @@ Begin a new sub-path. After this call the current point will be (`x`,
 Context.rectangle = argcheck{
    doc = [[
 <a name="Context.rectangle">
-#### Context.rectangle()
+#### Context.rectangle(@ARGP)
+
+@ARGT
 
 Adds a closed sub-path rectangle of the given size to the current
 path at position (`x`, `y`) in user-space coordinates.
@@ -1744,7 +1938,9 @@ cairo_close_path (cr);
 Context.glyphPath = argcheck{
    doc = [[
 <a name="Context.glyphPath">
-#### Context.glyphPath()
+#### Context.glyphPath(@ARGP)
+
+@ARGT
 
 Adds closed paths for the glyphs to the current path.  The generated
 path if filled, achieves an effect similar to that of
@@ -1763,7 +1959,9 @@ path if filled, achieves an effect similar to that of
 Context.textPath = argcheck{
    doc = [[
 <a name="Context.textPath">
-#### Context.textPath()
+#### Context.textPath(@ARGP)
+
+@ARGT
 
 Adds closed paths for text to the current path.  The generated
 path if filled, achieves an effect similar to that of
@@ -1796,7 +1994,9 @@ serious text-using applications. See [`Context.glyphPath()`](#Context.glyphPath)
 Context.relCurveTo = argcheck{
    doc = [[
 <a name="Context.relCurveTo">
-#### Context.relCurveTo()
+#### Context.relCurveTo(@ARGP)
+
+@ARGT
 
 Relative-coordinate version of [`Context.curveTo()`](#Context.curveTo). All offsets are
 relative to the current point. Adds a cubic Bézier spline to the
@@ -1830,7 +2030,9 @@ so will cause `cr` to shutdown with a status of
 Context.relLineTo = argcheck{
    doc = [[
 <a name="Context.relLineTo">
-#### Context.relLineTo()
+#### Context.relLineTo(@ARGP)
+
+@ARGT
 
 Relative-coordinate version of [`Context.lineTo()`](#Context.lineTo). Adds a line to the
 path from the current point to a point that is offset from the
@@ -1857,7 +2059,9 @@ so will cause `cr` to shutdown with a status of
 Context.relMoveTo = argcheck{
    doc = [[
 <a name="Context.relMoveTo">
-#### Context.relMoveTo()
+#### Context.relMoveTo(@ARGP)
+
+@ARGT
 
 Begin a new sub-path. After this call the current point will offset
 by (`x`, `y`).
@@ -1880,7 +2084,42 @@ so will cause `cr` to shutdown with a status of
 }
 
 Context.pathExtents = argcheck{
-   {name="self", type="cairo.Context"},
+   doc = [[
+<a name="Context.pathExtents">
+#### Context.pathExtents(@ARGP)
+
+@ARGT
+
+Computes a bounding box in user-space coordinates covering the
+points on the current path. If the current path is empty, returns
+an empty rectangle ((0,0), (0,0)). Stroke parameters, fill rule,
+surface dimensions and clipping are not taken into account.
+
+Contrast with [`Context.fillExtents()`](#Context.fillExtents) and [`Context.strokeExtents()`](#Context.strokeExtents) which
+return the extents of only the area that would be "inked" by
+the corresponding drawing operations.
+
+The result of [`Path.extents()`](path.md#Path.extents) is defined as equivalent to the
+limit of [`Context.strokeExtents()`](#Context.strokeExtents) with [`"round"`](enums.md#LineCap) as the
+line width approaches 0.0, (but never reaching the empty-rectangle
+returned by [`Context.strokeExtents()`](#Context.strokeExtents) for a line width of 0.0).
+
+Specifically, this means that zero-area sub-paths such as
+[`Context.moveTo();cairoLineTo()`](#Context.moveTo();cairoLineTo) segments, (even degenerate cases
+where the coordinates to both calls are identical), will be
+considered as contributing to the extents. However, a lone
+[`Context.moveTo()`](#Context.moveTo) will not contribute to the results of
+[`Path.extents()`](path.md#Path.extents).
+
+_Returns_:
+
+x1  --  left of the resulting extents
+y1  --  top of the resulting extents
+x2  --  right of the resulting extents
+y2  --  bottom of the resulting extents
+
+]],
+   {name="self", type="cairo.Context", doc="a cairo context"},
    call =
       function(self)
          local x1 = ffi.new('double[1]')
@@ -1901,7 +2140,9 @@ doc[[
 Context.translate = argcheck{
    doc = [[
 <a name="Context.translate">
-#### Context.translate()
+#### Context.translate(@ARGP)
+
+@ARGT
 
 Modifies the current transformation matrix (CTM) by translating the
 user-space origin by (`tx`, `ty`). This offset is interpreted as a
@@ -1922,7 +2163,9 @@ user-space origin takes place after any existing transformation.
 Context.scale = argcheck{
    doc = [[
 <a name="Context.scale">
-#### Context.scale()
+#### Context.scale(@ARGP)
+
+@ARGT
 
 Modifies the current transformation matrix (CTM) by scaling the X
 and Y user-space axes by `sx` and `sy` respectively. The scaling of
@@ -1942,7 +2185,9 @@ space.
 Context.rotate = argcheck{
    doc = [[
 <a name="Context.rotate">
-#### Context.rotate()
+#### Context.rotate(@ARGP)
+
+@ARGT
 
 Modifies the current transformation matrix (CTM) by rotating the
 user-space axes by `angle` radians. The rotation of the axes takes
@@ -1962,7 +2207,9 @@ toward the positive Y axis.
 Context.transform = argcheck{
    doc = [[
 <a name="Context.transform">
-#### Context.transform()
+#### Context.transform(@ARGP)
+
+@ARGT
 
 Modifies the current transformation matrix (CTM) by applying
 `matrix` as an additional transformation. The new transformation of
@@ -1980,7 +2227,9 @@ user space takes place after any existing transformation.
 Context.setMatrix = argcheck{
    doc = [[
 <a name="Context.setMatrix">
-#### Context.setMatrix()
+#### Context.setMatrix(@ARGP)
+
+@ARGT
 
 Modifies the current transformation matrix (CTM) by setting it
 equal to `matrix`.
@@ -1997,7 +2246,9 @@ equal to `matrix`.
 Context.getMatrix = argcheck{
    doc = [[
 <a name="Context.getMatrix">
-#### Context.getMatrix()
+#### Context.getMatrix(@ARGP)
+
+@ARGT
 
 Stores the current transformation matrix (CTM) into `matrix`.
 
@@ -2014,7 +2265,9 @@ Stores the current transformation matrix (CTM) into `matrix`.
 Context.identityMatrix = argcheck{
    doc = [[
 <a name="Context.identityMatrix">
-#### Context.identityMatrix()
+#### Context.identityMatrix(@ARGP)
+
+@ARGT
 
 Resets the current transformation matrix (CTM) by setting it equal
 to the identity matrix. That is, the user-space and device-space
@@ -2032,7 +2285,9 @@ device-space unit.
 Context.userToDevice = argcheck{
    doc = [[
 <a name="Context.userToDevice">
-#### Context.userToDevice()
+#### Context.userToDevice(@ARGP)
+
+@ARGT
 
 Transform a coordinate from user space to device space by
 multiplying the given point by the current transformation matrix
@@ -2052,7 +2307,9 @@ multiplying the given point by the current transformation matrix
 Context.userToDeviceDistance = argcheck{
    doc = [[
 <a name="Context.userToDeviceDistance">
-#### Context.userToDeviceDistance()
+#### Context.userToDeviceDistance(@ARGP)
+
+@ARGT
 
 Transform a distance vector from user space to device space. This
 function is similar to [`Context.userToDevice()`](#Context.userToDevice) except that the
@@ -2073,7 +2330,9 @@ translation components of the CTM will be ignored when transforming
 Context.deviceToUser = argcheck{
    doc = [[
 <a name="Context.deviceToUser">
-#### Context.deviceToUser()
+#### Context.deviceToUser(@ARGP)
+
+@ARGT
 
 Transform a coordinate from device space to user space by
 multiplying the given point by the inverse of the current
@@ -2093,7 +2352,9 @@ transformation matrix (CTM).
 Context.deviceToUserDistance = argcheck{
    doc = [[
 <a name="Context.deviceToUserDistance">
-#### Context.deviceToUserDistance()
+#### Context.deviceToUserDistance(@ARGP)
+
+@ARGT
 
 Transform a distance vector from device space to user space. This
 function is similar to [`Context.deviceToUser()`](#Context.deviceToUser) except that the
@@ -2120,7 +2381,9 @@ doc[[
 Context.selectFontFace = argcheck{
    doc = [[
 <a name="Context.selectFontFace">
-#### Context.selectFontFace()
+#### Context.selectFontFace(@ARGP)
+
+@ARGT
 
 Note: The [`Context.selectFontFace()`](#Context.selectFontFace) function call is part of what
 the cairo designers call the "toy" text API. It is convenient for
@@ -2180,7 +2443,9 @@ followed by [`Context.setFontFace()`](#Context.setFontFace).
 Context.setFontSize = argcheck{
    doc = [[
 <a name="Context.setFontSize">
-#### Context.setFontSize()
+#### Context.setFontSize(@ARGP)
+
+@ARGT
 
 Sets the current font matrix to a scale by a factor of `size`, replacing
 any font matrix previously set with [`Context.setFontSize()`](#Context.setFontSize) or
@@ -2204,7 +2469,9 @@ font size is 10.0.
 Context.setFontMatrix = argcheck{
    doc = [[
 <a name="Context.setFontMatrix">
-#### Context.setFontMatrix()
+#### Context.setFontMatrix(@ARGP)
+
+@ARGT
 
 Sets the current font matrix to `matrix`. The font matrix gives a
 transformation from the design space of the font (in this space,
@@ -2225,7 +2492,9 @@ or stretch it unequally along the two axes
 Context.getFontMatrix = argcheck{
    doc = [[
 <a name="Context.getFontMatrix">
-#### Context.getFontMatrix()
+#### Context.getFontMatrix(@ARGP)
+
+@ARGT
 
 Stores the current font matrix into `matrix`. See
 [`Context.setFontMatrix()`](#Context.setFontMatrix).
@@ -2243,7 +2512,9 @@ Stores the current font matrix into `matrix`. See
 Context.setFontOptions = argcheck{
    doc = [[
 <a name="Context.setFontOptions">
-#### Context.setFontOptions()
+#### Context.setFontOptions(@ARGP)
+
+@ARGT
 
 Sets a set of custom font rendering options for the [`Context`](#Context).
 Rendering options are derived by merging these options with the
@@ -2263,7 +2534,9 @@ from the surface is used.
 Context.getFontOptions = argcheck{
    doc = [[
 <a name="Context.getFontOptions">
-#### Context.getFontOptions()
+#### Context.getFontOptions(@ARGP)
+
+@ARGT
 
 Retrieves font rendering options set via [`cairo_set_font_options`](#cairo_set_font_options).
 Note that the returned options do not include any options derived
@@ -2283,7 +2556,9 @@ passed to [`Context.setFontOptions()`](#Context.setFontOptions).
 Context.setFontFace = argcheck{
    doc = [[
 <a name="Context.setFontFace">
-#### Context.setFontFace()
+#### Context.setFontFace(@ARGP)
+
+@ARGT
 
 Replaces the current [`FontFace`](fontface.md#FontFace) object in the [`Context`](#Context) with
 `font_face`. The replaced font face in the [`Context`](#Context) will be
@@ -2301,7 +2576,9 @@ destroyed if there are no other references to it.
 Context.getFontFace = argcheck{
    doc = [[
 <a name="Context.getFontFace">
-#### Context.getFontFace()
+#### Context.getFontFace(@ARGP)
+
+@ARGT
 
 Gets the current font face for a [`Context`](#Context).
 
@@ -2328,7 +2605,9 @@ will shutdown the [`Context`](#Context) object).
 Context.setScaledFont = argcheck{
    doc = [[
 <a name="Context.setScaledFont">
-#### Context.setScaledFont()
+#### Context.setScaledFont(@ARGP)
+
+@ARGT
 
 Replaces the current font face, font matrix, and font options in
 the [`Context`](#Context) with those of the [`ScaledFontFace`](fontface.md#ScaledFontFace).  Except for
@@ -2348,7 +2627,9 @@ using [`ScaledFontFace.getCtm()`](fontface.md#ScaledFontFace.getCtm).
 Context.getScaledFont = argcheck{
    doc = [[
 <a name="Context.getScaledFont">
-#### Context.getScaledFont()
+#### Context.getScaledFont(@ARGP)
+
+@ARGT
 
 Gets the current scaled font for a [`Context`](#Context).
 
@@ -2375,7 +2656,9 @@ will shutdown the [`Context`](#Context) object).
 Context.showText = argcheck{
    doc = [[
 <a name="Context.showText">
-#### Context.showText()
+#### Context.showText(@ARGP)
+
+@ARGT
 
 A drawing operator that generates the shape from a string of UTF-8
 characters, rendered according to the current font_face, font_size
@@ -2411,7 +2694,9 @@ serious text-using applications. See [`Context.showGlyphs()`](#Context.showGlyph
 Context.showGlyphs = argcheck{
    doc = [[
 <a name="Context.showGlyphs">
-#### Context.showGlyphs()
+#### Context.showGlyphs(@ARGP)
+
+@ARGT
 
 A drawing operator that generates the shape from an array of glyphs,
 rendered according to the current font face, font size
@@ -2430,7 +2715,9 @@ rendered according to the current font face, font size
 Context.showTextGlyphs = argcheck{
    doc = [[
 <a name="Context.showTextGlyphs">
-#### Context.showTextGlyphs()
+#### Context.showTextGlyphs(@ARGP)
+
+@ARGT
 
 This operation has rendering effects similar to [`Context.showGlyphs()`](#Context.showGlyphs)
 but, if the target surface supports it, uses the provided text and
@@ -2471,7 +2758,9 @@ See [`cairo_text_cluster_t`](#cairo_text_cluster_t) for constraints on valid clu
 Context.fontExtents = argcheck{
    doc = [[
 <a name="Context.fontExtents">
-#### Context.fontExtents()
+#### Context.fontExtents(@ARGP)
+
+@ARGT
 
 Gets the font extents for the currently selected font.
 
@@ -2492,7 +2781,9 @@ Gets the font extents for the currently selected font.
 Context.textExtents = argcheck{
    doc = [[
 <a name="Context.textExtents">
-#### Context.textExtents()
+#### Context.textExtents(@ARGP)
+
+@ARGT
 
 Gets the extents for a string of text. The extents describe a
 user-space rectangle that encloses the "inked" portion of the text,
@@ -2525,7 +2816,9 @@ affect the x_advance and y_advance values.
 Context.glyphExtents = argcheck{
    doc = [[
 <a name="Context.glyphExtents">
-#### Context.glyphExtents()
+#### Context.glyphExtents(@ARGP)
+
+@ARGT
 
 Gets the extents for an array of glyphs. The extents describe a
 user-space rectangle that encloses the "inked" portion of the
