@@ -21,14 +21,14 @@ Surface.__init = argcheck{
       end
 }
 
-argcheck{
+Surface.__init = argcheck{
    {name="self", type="cairo.Surface"},
    {name="surface", type="cairo.Surface"},
    {name="x", type="number"},
    {name="y", type="number"},
    {name="width", type="number"},
    {name="height", type="number"},
-   chain = Surface.__init,
+   overload = Surface.__init,
    call =
       function(self, surface, x, y, width, height)
          self.C = C.cairo_surface_create_for_rectangle(surface.C, x, y, width, height)
@@ -37,11 +37,11 @@ argcheck{
       end
 }
 
-argcheck{
+Surface.__init = argcheck{
    {name="self", type="cairo.Surface"},
    {name="cdata", type="cdata"},
    {name="incref", type="boolean", default=false},
-   chain = Surface.__init,
+   overload = Surface.__init,
    call =
       function(self, cdata, incref)
          self.C = cdata

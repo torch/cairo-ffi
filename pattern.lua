@@ -75,13 +75,13 @@ SolidPattern.__init = argcheck{
       end
 }
 
-argcheck{
+SolidPattern.__init = argcheck{
    {name="self", type="cairo.SolidPattern"},
    {name="red", type="number"},
    {name="green", type="number"},
    {name="blue", type="number"},
    {name="alpha", type="number"},
-   chain = SolidPattern.__init,
+   overload = SolidPattern.__init,
    call =
       function(self, red, green, blue, alpha)
          self.C = C.cairo_pattern_create_rgba(red, green, blue, alpha)

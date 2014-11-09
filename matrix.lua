@@ -23,7 +23,7 @@ Matrix.__init = argcheck{
       end
 }
 
-argcheck{
+Matrix.__init = argcheck{
    {name="self", type="cairo.Matrix"},
    {name="xx", type="number"},
    {name="yx", type="number"},
@@ -31,7 +31,7 @@ argcheck{
    {name="yy", type="number"},
    {name="x0", type="number"},
    {name="y0", type="number"},
-   chain = Matrix.__init,
+   overload = Matrix.__init,
    call =
       function(self, xx, yx, xy, yy, x0, y0)
          self.C = ffi.new('cairo_matrix_t')
@@ -40,10 +40,10 @@ argcheck{
       end
 }
 
-argcheck{
+Matrix.__init = argcheck{
    {name="self", type="cairo.Matrix"},
    {name="values", type="table"},
-   chain = Matrix.__init,
+   overload = Matrix.__init,
    call =
       function(self, values)
          self.C = ffi.new('cairo_matrix_t')
@@ -74,10 +74,10 @@ Matrix.set = argcheck{
       end
 }
 
-argcheck{
+Matrix.set = argcheck{
    {name="self", type="cairo.Matrix"},
    {name="values", type="table"},
-   chain = Matrix.set,
+   overload = Matrix.set,
    call =
       function(self, values)
          assert(values.xx and values.yx and values.xy and values.yy and values.x0 and values.y0, 'missing table fields')

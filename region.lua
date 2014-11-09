@@ -18,10 +18,10 @@ Region.__init = argcheck{
       end
 }
 
-argcheck{
+Region.__init = argcheck{
    {name="self", type="cairo.Region"},
    {name="rectangle", type="table"},
-   chain = Region.__init,
+   overload = Region.__init,
    call =
       function(self, rectangle)
          if type(rectangle[1]) == 'table' then
@@ -130,11 +130,11 @@ Region.contains = argcheck{
       end
 }
 
-argcheck{
+Region.contains = argcheck{
    {name="self", type="cairo.Region"},
    {name="x", type="number"},
    {name="y", type="number"},
-   chain = Region.contains,
+   overload = Region.contains,
    call =
       function(self, x, y)
          return (C.cairo_region_contains_point(self.C) == 1)
@@ -160,10 +160,10 @@ Region.subtract = argcheck{
       end
 }
 
-argcheck{
+Region.substract = argcheck{
    {name="self", type="cairo.Region"},
    {name="rectangle", type="table"},
-   chain = Region.substract,
+   overload = Region.substract,
    call =
       function(self, rectangle)
          rectangle = utils.intrectangle_lua2C(rectangle)
@@ -180,10 +180,10 @@ Region.intersect = argcheck{
       end
 }
 
-argcheck{
+Region.intersect = argcheck{
    {name="self", type="cairo.Region"},
    {name="rectangle", type="table"},
-   chain = Region.intersect,
+   overload = Region.intersect,
    call =
       function(self, rectangle)
          rectangle = utils.intrectangle_lua2C(rectangle)
@@ -200,10 +200,10 @@ Region.union = argcheck{
       end
 }
 
-argcheck{
+Region.union = argcheck{
    {name="self", type="cairo.Region"},
    {name="rectangle", type="table"},
-   chain = Region.union,
+   overload = Region.union,
    call =
       function(self, rectangle)
          rectangle = utils.intrectangle_lua2C(rectangle)
@@ -220,10 +220,10 @@ Region.xor = argcheck{
       end
 }
 
-argcheck{
+Region.xor = argcheck{
    {name="self", type="cairo.Region"},
    {name="rectangle", type="table"},
-   chain = Region.xor,
+   overload = Region.xor,
    call =
       function(self, rectangle)
          rectangle = utils.intrectangle_lua2C(rectangle)

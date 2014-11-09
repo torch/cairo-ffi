@@ -33,10 +33,10 @@ You can check for this with [`FontOptions.status()`](#FontOptions.status).
       end
 }
 
-argcheck{
+FontOptions.__init = argcheck{
    {name="self", type="cairo.FontOptions"},
    {name="other", type="cairo.FontOptions"},
-   chain = FontOptions.__init,
+   overload = FontOptions.__init,
    call =
       function(self, other)
          self.C = C.cairo_font_options_copy(other.C)

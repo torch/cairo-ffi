@@ -44,7 +44,7 @@ occurs. You can use [`Surface.status()`](surface.md#Surface.status) to check for
       end
 }
 
-argcheck{
+ImageSurface.__init = argcheck{
    doc = [[
 
 ##### ImageSurface.new(@ARGP)
@@ -74,7 +74,7 @@ or any other error occurs.
    {name="format", type="string", doc="the format for the new surface"},
    {name="width", type="number", doc="width  --  width of the new surface, (in device-space units)"},
    {name="height", type="number", doc="height of the new surface (in device-space units)"},
-   chain = ImageSurface.__init,
+   overload = ImageSurface.__init,
    call =
       function(self, other, format, width, height)
          self.C = C.cairo_surface_create_similar_image(other.C, cairo.enums.Format[format], width, height)
@@ -83,7 +83,7 @@ or any other error occurs.
       end
 }
 
-argcheck{
+ImageSurface.__init = argcheck{
    doc = [[
 
 ##### ImageSurface.new(@ARGP)
@@ -114,7 +114,7 @@ is not [`"invalid"`](enums.md#Format).
    {name="self", type="cairo.ImageSurface"},
    {name="other", type="cairo.Surface", doc="an existing surface used to extract the image from"},
    {name="extents", type="table", doc="limit the extraction to an rectangular region"},
-   chain = ImageSurface.__init,
+   overload = ImageSurface.__init,
    call =
       function(self, other, extents)
          local extents_p = ffi.new('cairo_rectangle_int_t', extents)
@@ -124,7 +124,7 @@ is not [`"invalid"`](enums.md#Format).
       end
 }
 
-argcheck{
+ImageSurface.__init = argcheck{
    doc = [[
 
 ##### ImageSurface.new(@ARGP)
@@ -166,7 +166,7 @@ destroy-notification fallback to the surface if necessary.
    {name="width", type="number", doc="the width of the image to be stored in the buffer"},
    {name="height", type="number", doc="the height of the image to be stored in the buffer"},
    {name="stride", type="number", doc="the number of bytes between the start of rows in the buffer as allocated. This value should always be computed by [`Context.formatStrideForWidth()`](context.md#Context.formatStrideForWidth) before allocating the data buffer"},
-   chain = ImageSurface.__init,
+   overload = ImageSurface.__init,
    call =
       function(self, data, format, width, height, stride)
          self.C = C.cairo_image_surface_create_for_data(data, cairo.enums.Format[format], width, height, stride)
