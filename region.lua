@@ -9,6 +9,7 @@ local Region = class.new('cairo.Region')
 cairo.Region = Region
 
 Region.__init = argcheck{
+   nonamed = true,
    {name="self", type="cairo.Region"},
    call =
       function(self)

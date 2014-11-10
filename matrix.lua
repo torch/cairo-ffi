@@ -15,6 +15,7 @@ local Matrix = class.new('cairo.Matrix')
 cairo.Matrix = Matrix
 
 Matrix.__init = argcheck{
+   nonamed = true,
    {name="self", type="cairo.Matrix"},
    call =
       function(self)
