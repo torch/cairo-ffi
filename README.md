@@ -1,13 +1,13 @@
 ### Drawing Context
 
-<a name="Context.status">
+<a name="Context.status"></a>
 #### Context.status()
 
 Checks whether an error has previously occurred for this context.
 
 _Returns_: the current status of this context, see [`Status`](enums.md#Status)
 
-<a name="Context.save">
+<a name="Context.save"></a>
 #### Context.save()
 
 Makes a copy of the current state of `cr` and saves it
@@ -22,14 +22,14 @@ a [`Context`](#Context) is freed. If the reference count of a [`Context`](#Conte
 drops to zero in response to a call to [`Context.destroy()`](#Context.destroy),
 any saved states will be freed along with the [`Context`](#Context).
 
-<a name="Context.restore">
+<a name="Context.restore"></a>
 #### Context.restore()
 
 Restores `cr` to the state saved by a preceding call to
 [`Context.save()`](#Context.save) and removes that state from the stack of
 saved states.
 
-<a name="Context.getTarget">
+<a name="Context.getTarget"></a>
 #### Context.getTarget()
 
 Gets the target surface for the cairo context as passed to
@@ -44,7 +44,7 @@ A nil surface is indicated by [`Surface.status()`](surface.md#Surface.status)
 _Return value_: the target surface. This object is owned by cairo. To
 keep a reference to it, you must call [`Surface.reference()`](surface.md#Surface.reference).
 
-<a name="Context.pushGroup">
+<a name="Context.pushGroup"></a>
 #### Context.pushGroup()
 
 Temporarily redirects drawing to an intermediate surface known as a
@@ -85,7 +85,7 @@ cairo_pop_group_to_source (cr);
 cairo_paint_with_alpha (cr, alpha);
 ```
 
-<a name="Context.pushGroupWithContent">
+<a name="Context.pushGroupWithContent"></a>
 #### Context.pushGroupWithContent()
 
 Temporarily redirects drawing to an intermediate surface known as a
@@ -99,7 +99,7 @@ control this content type is the only distinction between this
 function and [`Context.pushGroup()`](#Context.pushGroup) which you should see for a more
 detailed description of group rendering.
 
-<a name="Context.popGroup">
+<a name="Context.popGroup"></a>
 #### Context.popGroup()
 
 Terminates the redirection begun by a call to [`Context.pushGroup()`](#Context.pushGroup) or
@@ -117,7 +117,7 @@ results of all drawing operations performed to the group. The
 caller owns the returned object and should call
 [`Pattern.destroy()`](pattern.md#Pattern.destroy) when finished with it.
 
-<a name="Context.popGroupToSource">
+<a name="Context.popGroupToSource"></a>
 #### Context.popGroupToSource()
 
 Terminates the redirection begun by a call to [`Context.pushGroup()`](#Context.pushGroup) or
@@ -141,7 +141,7 @@ call to [`Context.save()`](#Context.save) by the push_group function), so that a
 changes to the graphics state will not be visible outside the
 group.
 
-<a name="Context.getGroupTarget">
+<a name="Context.getGroupTarget"></a>
 #### Context.getGroupTarget()
 
 Gets the current destination surface for the context. This is either
@@ -158,7 +158,7 @@ A nil surface is indicated by [`Surface.status()`](surface.md#Surface.status)
 _Return value_: the target surface. This object is owned by cairo. To
 keep a reference to it, you must call [`Surface.reference()`](surface.md#Surface.reference).
 
-<a name="Context.setSource">
+<a name="Context.setSource"></a>
 #### Context.setSource()
 
 Sets the source pattern within `cr` to `source`. This pattern
@@ -174,7 +174,7 @@ The default source pattern is a solid pattern that is opaque black,
 (that is, it is equivalent to cairo_set_source_rgb(cr, 0.0, 0.0,
 0.0)).
 
-<a name="Context.setSourceSurface">
+<a name="Context.setSourceSurface"></a>
 #### Context.setSourceSurface()
 
 This is a convenience function for creating a pattern from `surface`
@@ -193,7 +193,7 @@ The resulting pattern can be queried with [`Context.getSource()`](#Context.getSo
 that these attributes can be modified if desired, (eg. to create a
 repeating pattern with [`Pattern.setExtend()`](pattern.md#Pattern.setExtend)).
 
-<a name="Context.getSource">
+<a name="Context.getSource"></a>
 #### Context.getSource()
 
 Gets the current source pattern for `cr`.
@@ -202,7 +202,7 @@ _Return value_: the current source pattern. This object is owned by
 cairo. To keep a reference to it, you must call
 [`Pattern.reference()`](pattern.md#Pattern.reference).
 
-<a name="Context.setAntialias">
+<a name="Context.setAntialias"></a>
 #### Context.setAntialias()
 
 Set the antialiasing mode of the rasterizer used for drawing shapes.
@@ -213,7 +213,7 @@ a particular value.  At the current time, no backend supports
 Note that this option does not affect text rendering, instead see
 [`FontOptions.setAntialias()`](fontoptions.md#FontOptions.setAntialias).
 
-<a name="Context.getAntialias">
+<a name="Context.getAntialias"></a>
 #### Context.getAntialias()
 
 Gets the current shape antialiasing mode, as set by
@@ -221,7 +221,7 @@ Gets the current shape antialiasing mode, as set by
 
 _Return value_: the current shape antialiasing mode.
 
-<a name="Context.setDash">
+<a name="Context.setDash"></a>
 #### Context.setDash()
 
 Sets the dash pattern to be used by [`Context.stroke()`](#Context.stroke). A dash pattern
@@ -249,7 +249,7 @@ If any value in `dashes` is negative, or if all values are 0, then
 `cr` will be put into an error state with a status of
 [`"invalid-dash"`](enums.md#Status).
 
-<a name="Context.getDashCount">
+<a name="Context.getDashCount"></a>
 #### Context.getDashCount()
 
 This function returns the length of the dash array in `cr` (0 if dashing
@@ -259,14 +259,14 @@ See also [`Context.setDash()`](#Context.setDash) and [`Context.getDash()`](#Cont
 
 _Return value_: the length of the dash array, or 0 if no dash array set.
 
-<a name="Context.getDash">
+<a name="Context.getDash"></a>
 #### Context.getDash()
 
 Gets the current dash array.  If not `nil`, `dashes` should be big
 enough to hold at least the number of values returned by
 [`Context.getDashCount()`](#Context.getDashCount).
 
-<a name="Context.setFillRule">
+<a name="Context.setFillRule"></a>
 #### Context.setFillRule()
 
 Set the current fill rule within the cairo context. The fill rule
@@ -277,14 +277,14 @@ on the semantics of each available fill rule.
 
 The default fill rule is [`"winding"`](enums.md#FillRule).
 
-<a name="Context.getFillRule">
+<a name="Context.getFillRule"></a>
 #### Context.getFillRule()
 
 Gets the current fill rule, as set by [`Context.setFillRule()`](#Context.setFillRule).
 
 _Return value_: the current fill rule.
 
-<a name="Context.setLineCap">
+<a name="Context.setLineCap"></a>
 #### Context.setLineCap()
 
 Sets the current line cap style within the cairo context. See
@@ -298,14 +298,14 @@ construction.
 
 The default line cap style is [`"butt"`](enums.md#LineCap).
 
-<a name="Context.getLineCap">
+<a name="Context.getLineCap"></a>
 #### Context.getLineCap()
 
 Gets the current line cap style, as set by [`Context.setLineCap()`](#Context.setLineCap).
 
 _Return value_: the current line cap style.
 
-<a name="Context.setLineJoin">
+<a name="Context.setLineJoin"></a>
 #### Context.setLineJoin()
 
 Sets the current line join style within the cairo context. See
@@ -319,14 +319,14 @@ construction.
 
 The default line join style is [`"miter"`](enums.md#LineJoin).
 
-<a name="Context.getLineJoin">
+<a name="Context.getLineJoin"></a>
 #### Context.getLineJoin()
 
 Gets the current line join style, as set by [`Context.setLineJoin()`](#Context.setLineJoin).
 
 _Return value_: the current line join style.
 
-<a name="Context.setLineWidth">
+<a name="Context.setLineWidth"></a>
 #### Context.setLineWidth()
 
 Sets the current line width within the cairo context. The line
@@ -350,7 +350,7 @@ construction.
 
 The default line width value is 2.0.
 
-<a name="Context.getLineWidth">
+<a name="Context.getLineWidth"></a>
 #### Context.getLineWidth()
 
 This function returns the current line width value exactly as set by
@@ -360,7 +360,7 @@ the CTM has changed between the calls to [`Context.setLineWidth()`](#Context.set
 
 _Return value_: the current line width.
 
-<a name="Context.setMiterLimit">
+<a name="Context.setMiterLimit"></a>
 #### Context.setMiterLimit()
 
 Sets the current miter limit within the cairo context.
@@ -386,14 +386,14 @@ degrees.
 A miter limit for a desired angle can be computed as: miter limit =
 1/sin(angle/2)
 
-<a name="Context.getMiterLimit">
+<a name="Context.getMiterLimit"></a>
 #### Context.getMiterLimit()
 
 Gets the current miter limit, as set by [`Context.setMiterLimit()`](#Context.setMiterLimit).
 
 _Return value_: the current miter limit.
 
-<a name="Context.setOperator">
+<a name="Context.setOperator"></a>
 #### Context.setOperator()
 
 Sets the compositing operator to be used for all drawing
@@ -402,14 +402,14 @@ each available compositing operator.
 
 The default operator is [`"over"`](enums.md#Operator).
 
-<a name="Context.getOperator">
+<a name="Context.getOperator"></a>
 #### Context.getOperator()
 
 Gets the current compositing operator for a cairo context.
 
 _Return value_: the current compositing operator.
 
-<a name="Context.setTolerance">
+<a name="Context.setTolerance"></a>
 #### Context.setTolerance()
 
 Sets the tolerance used when converting paths into trapezoids.
@@ -423,14 +423,14 @@ within Cairo is limited by the precision of its internal arithmetic, and
 the prescribed `tolerance` is restricted to the smallest
 representable internal value.
 
-<a name="Context.getTolerance">
+<a name="Context.getTolerance"></a>
 #### Context.getTolerance()
 
 Gets the current tolerance value, as set by [`Context.setTolerance()`](#Context.setTolerance).
 
 _Return value_: the current tolerance value.
 
-<a name="Context.clip">
+<a name="Context.clip"></a>
 #### Context.clip()
 
 Establishes a new clip region by intersecting the current clip
@@ -451,7 +451,7 @@ calling [`Context.clip()`](#Context.clip) within a [`Context.save()/cairoRestore
 pair. The only other means of increasing the size of the clip
 region is [`Context.resetClip()`](#Context.resetClip).
 
-<a name="Context.clipPreserve">
+<a name="Context.clipPreserve"></a>
 #### Context.clipPreserve()
 
 Establishes a new clip region by intersecting the current clip
@@ -472,13 +472,13 @@ calling [`Context.clipPreserve()`](#Context.clipPreserve) within a [`Context.sav
 pair. The only other means of increasing the size of the clip
 region is [`Context.resetClip()`](#Context.resetClip).
 
-<a name="Context.clipExtents">
+<a name="Context.clipExtents"></a>
 #### Context.clipExtents()
 
 Computes a bounding box in user coordinates covering the area inside the
 current clip.
 
-<a name="Context.inClip">
+<a name="Context.inClip"></a>
 #### Context.inClip()
 
 Tests whether the given point is inside the area that would be
@@ -490,7 +490,7 @@ See [`Context.clip()`](#Context.clip), and [`Context.clipPreserve()`](#Context.c
 _Return value_: A non-zero value if the point is inside, or zero if
 outside.
 
-<a name="Context.resetClip">
+<a name="Context.resetClip"></a>
 #### Context.resetClip()
 
 Reset the current clip region to its original, unrestricted
@@ -505,7 +505,7 @@ higher-level code which calls [`Context.clip()`](#Context.clip). Consider using
 [`Context.save()`](#Context.save) and [`Context.restore()`](#Context.restore) around [`Context.clip()`](#Context.clip) as a more
 robust means of temporarily restricting the clip region.
 
-<a name="Context.copyClipRectangleList">
+<a name="Context.copyClipRectangleList"></a>
 #### Context.copyClipRectangleList()
 
 Gets the current clip region as a list of rectangles in user coordinates.
@@ -519,7 +519,7 @@ other errors.
 _Returns_: the current clip region as a list of rectangles in user coordinates,
 which should be destroyed using [`Context.rectangleListDestroy()`](#Context.rectangleListDestroy).
 
-<a name="Context.fill">
+<a name="Context.fill"></a>
 #### Context.fill()
 
 A drawing operator that fills the current path according to the
@@ -528,7 +528,7 @@ filled). After [`Context.fill()`](#Context.fill), the current path will be clear
 the cairo context. See [`Context.setFillRule()`](#Context.setFillRule) and
 [`Context.fillPreserve()`](#Context.fillPreserve).
 
-<a name="Context.fillPreserve">
+<a name="Context.fillPreserve"></a>
 #### Context.fillPreserve()
 
 A drawing operator that fills the current path according to the
@@ -538,7 +538,7 @@ path within the cairo context.
 
 See [`Context.setFillRule()`](#Context.setFillRule) and [`Context.fill()`](#Context.fill).
 
-<a name="Context.fillExtents">
+<a name="Context.fillExtents"></a>
 #### Context.fillExtents()
 
 Computes a bounding box in user coordinates covering the area that
@@ -558,7 +558,7 @@ if the non-inked path extents are desired.
 
 See [`Context.fill()`](#Context.fill), [`Context.setFillRule()`](#Context.setFillRule) and [`Context.fillPreserve()`](#Context.fillPreserve).
 
-<a name="Context.inFill">
+<a name="Context.inFill"></a>
 #### Context.inFill()
 
 Tests whether the given point is inside the area that would be
@@ -571,7 +571,7 @@ See [`Context.fill()`](#Context.fill), [`Context.setFillRule()`](#Context.setFil
 _Return value_: A non-zero value if the point is inside, or zero if
 outside.
 
-<a name="Context.mask">
+<a name="Context.mask"></a>
 #### Context.mask()
 
 A drawing operator that paints the current source
@@ -579,7 +579,7 @@ using the alpha channel of `pattern` as a mask. (Opaque
 areas of `pattern` are painted with the source, transparent
 areas are not painted.)
 
-<a name="Context.maskSurface">
+<a name="Context.maskSurface"></a>
 #### Context.maskSurface()
 
 A drawing operator that paints the current source
@@ -587,13 +587,13 @@ using the alpha channel of `surface` as a mask. (Opaque
 areas of `surface` are painted with the source, transparent
 areas are not painted.)
 
-<a name="Context.paint">
+<a name="Context.paint"></a>
 #### Context.paint()
 
 A drawing operator that paints the current source everywhere within
 the current clip region.
 
-<a name="Context.paintWithAlpha">
+<a name="Context.paintWithAlpha"></a>
 #### Context.paintWithAlpha()
 
 A drawing operator that paints the current source everywhere within
@@ -601,7 +601,7 @@ the current clip region using a mask of constant alpha value
 `alpha`. The effect is similar to [`Context.paint()`](#Context.paint), but the drawing
 is faded out using the alpha value.
 
-<a name="Context.stroke">
+<a name="Context.stroke"></a>
 #### Context.stroke()
 
 A drawing operator that strokes the current path according to the
@@ -632,7 +632,7 @@ is indeterminate).
 In no case will a cap style of [`"butt"`](enums.md#LineCap) cause anything
 to be drawn in the case of either degenerate segments or sub-paths.
 
-<a name="Context.strokePreserve">
+<a name="Context.strokePreserve"></a>
 #### Context.strokePreserve()
 
 A drawing operator that strokes the current path according to the
@@ -644,7 +644,7 @@ See [`Context.setLineWidth()`](#Context.setLineWidth), [`Context.setLineJoin()`]
 [`Context.setLineCap()`](#Context.setLineCap), [`Context.setDash()`](#Context.setDash), and
 [`Context.strokePreserve()`](#Context.strokePreserve).
 
-<a name="Context.strokeExtents">
+<a name="Context.strokeExtents"></a>
 #### Context.strokeExtents()
 
 Computes a bounding box in user coordinates covering the area that
@@ -667,7 +667,7 @@ See [`Context.stroke()`](#Context.stroke), [`Context.setLineWidth()`](#Context.s
 [`Context.setLineCap()`](#Context.setLineCap), [`Context.setDash()`](#Context.setDash), and
 [`Context.strokePreserve()`](#Context.strokePreserve).
 
-<a name="Context.inStroke">
+<a name="Context.inStroke"></a>
 #### Context.inStroke()
 
 Tests whether the given point is inside the area that would be
@@ -682,7 +682,7 @@ See [`Context.stroke()`](#Context.stroke), [`Context.setLineWidth()`](#Context.s
 _Return value_: A non-zero value if the point is inside, or zero if
 outside.
 
-<a name="Context.copyPage">
+<a name="Context.copyPage"></a>
 #### Context.copyPage()
 
 Emits the current page for backends that support multiple pages, but
@@ -693,7 +693,7 @@ empty page after the emission.
 This is a convenience function that simply calls
 [`Surface.copyPage()`](surface.md#Surface.copyPage) on `cr`'s target.
 
-<a name="Context.showPage">
+<a name="Context.showPage"></a>
 #### Context.showPage()
 
 Emits and clears the current page for backends that support multiple
@@ -705,7 +705,7 @@ This is a convenience function that simply calls
 
 ### Paths
 
-<a name="Context.copyPath">
+<a name="Context.copyPath"></a>
 #### Context.copyPath()
 
 Creates a copy of the current path and returns it to the user as a
@@ -730,7 +730,7 @@ _Return value_: the copy of the current path. The caller owns the
 returned object and should call [`Path.destroy()`](path.md#Path.destroy) when finished
 with it.
 
-<a name="Context.copyPathFlat">
+<a name="Context.copyPathFlat"></a>
 #### Context.copyPathFlat()
 
 Gets a flattened copy of the current path and returns it to the
@@ -762,7 +762,7 @@ _Return value_: the copy of the current path. The caller owns the
 returned object and should call [`Path.destroy()`](path.md#Path.destroy) when finished
 with it.
 
-<a name="Context.appendPath">
+<a name="Context.appendPath"></a>
 #### Context.appendPath()
 
 Append the `path` onto the current path. The `path` may be either the
@@ -772,7 +772,7 @@ return value from one of [`Context.copyPath()`](#Context.copyPath) or
 initialized, and note that `path->status` must be
 initialized to [`"success"`](enums.md#Status).
 
-<a name="Context.hasCurrentPoint">
+<a name="Context.hasCurrentPoint"></a>
 #### Context.hasCurrentPoint()
 
 Returns whether a current point is defined on the current path.
@@ -780,7 +780,7 @@ See [`Context.getCurrentPoint()`](#Context.getCurrentPoint) for details on the c
 
 _Return value_: whether a current point is defined.
 
-<a name="Context.getCurrentPoint">
+<a name="Context.getCurrentPoint"></a>
 #### Context.getCurrentPoint()
 
 Gets the current point of the current path, which is
@@ -807,13 +807,13 @@ otherwise change current path:
 Some functions unset the current path and as a result, current point:
 [`Context.fill()`](#Context.fill), [`Context.stroke()`](#Context.stroke).
 
-<a name="Context.newPath">
+<a name="Context.newPath"></a>
 #### Context.newPath()
 
 Clears the current path. After this call there will be no path and
 no current point.
 
-<a name="Context.newSubPath">
+<a name="Context.newSubPath"></a>
 #### Context.newSubPath()
 
 Begin a new sub-path. Note that the existing path is not
@@ -828,7 +828,7 @@ makes things easier as it is no longer necessary to manually
 compute the arc's initial coordinates for a call to
 [`Context.moveTo()`](#Context.moveTo).
 
-<a name="Context.closePath">
+<a name="Context.closePath"></a>
 #### Context.closePath()
 
 Adds a line segment to the path from the current point to the
@@ -853,7 +853,7 @@ not be necessary to save the "last move_to point" during processing
 as the MOVE_TO immediately after the CLOSE_PATH will provide that
 point.
 
-<a name="Context.arc">
+<a name="Context.arc"></a>
 #### Context.arc()
 
 Adds a circular arc of the given `radius` to the current path.  The
@@ -894,7 +894,7 @@ cairo_arc (cr, 0., 0., 1., 0., 2 * M_PI);
 cairo_restore (cr);
 ```
 
-<a name="Context.arcNegative">
+<a name="Context.arcNegative"></a>
 #### Context.arcNegative()
 
 Adds a circular arc of the given `radius` to the current path.  The
@@ -906,7 +906,7 @@ greater than `angle1` it will be progressively decreased by
 See [`Context.arc()`](#Context.arc) for more details. This function differs only in the
 direction of the arc between the two angles.
 
-<a name="Context.curveTo">
+<a name="Context.curveTo"></a>
 #### Context.curveTo()
 
 Adds a cubic Bézier spline to the path from the current point to
@@ -918,7 +918,7 @@ If there is no current point before the call to [`Context.curveTo()`](#Context.c
 this function will behave as if preceded by a call to
 cairo_move_to(`cr`, `x1`, `y1`).
 
-<a name="Context.lineTo">
+<a name="Context.lineTo"></a>
 #### Context.lineTo()
 
 Adds a line to the path from the current point to position (`x`, `y`)
@@ -928,13 +928,13 @@ will be (`x`, `y`).
 If there is no current point before the call to [`Context.lineTo()`](#Context.lineTo)
 this function will behave as cairo_move_to(`cr`, `x`, `y`).
 
-<a name="Context.moveTo">
+<a name="Context.moveTo"></a>
 #### Context.moveTo()
 
 Begin a new sub-path. After this call the current point will be (`x`,
 `y`).
 
-<a name="Context.rectangle">
+<a name="Context.rectangle"></a>
 #### Context.rectangle()
 
 Adds a closed sub-path rectangle of the given size to the current
@@ -949,14 +949,14 @@ cairo_rel_line_to (cr, -width, 0);
 cairo_close_path (cr);
 ```
 
-<a name="Context.glyphPath">
+<a name="Context.glyphPath"></a>
 #### Context.glyphPath()
 
 Adds closed paths for the glyphs to the current path.  The generated
 path if filled, achieves an effect similar to that of
 [`Context.showGlyphs()`](#Context.showGlyphs).
 
-<a name="Context.textPath">
+<a name="Context.textPath"></a>
 #### Context.textPath()
 
 Adds closed paths for text to the current path.  The generated
@@ -978,7 +978,7 @@ and simple programs, but it is not expected to be adequate for
 serious text-using applications. See [`Context.glyphPath()`](#Context.glyphPath) for the
 "real" text path API in cairo.
 
-<a name="Context.relCurveTo">
+<a name="Context.relCurveTo"></a>
 #### Context.relCurveTo()
 
 Relative-coordinate version of [`Context.curveTo()`](#Context.curveTo). All offsets are
@@ -996,7 +996,7 @@ It is an error to call this function with no current point. Doing
 so will cause `cr` to shutdown with a status of
 [`"no-current-point"`](enums.md#Status).
 
-<a name="Context.relLineTo">
+<a name="Context.relLineTo"></a>
 #### Context.relLineTo()
 
 Relative-coordinate version of [`Context.lineTo()`](#Context.lineTo). Adds a line to the
@@ -1011,7 +1011,7 @@ It is an error to call this function with no current point. Doing
 so will cause `cr` to shutdown with a status of
 [`"no-current-point"`](enums.md#Status).
 
-<a name="Context.relMoveTo">
+<a name="Context.relMoveTo"></a>
 #### Context.relMoveTo()
 
 Begin a new sub-path. After this call the current point will offset
@@ -1027,7 +1027,7 @@ so will cause `cr` to shutdown with a status of
 
 ### Transformations
 
-<a name="Context.translate">
+<a name="Context.translate"></a>
 #### Context.translate()
 
 Modifies the current transformation matrix (CTM) by translating the
@@ -1036,7 +1036,7 @@ user-space coordinate according to the CTM in place before the new
 call to [`Context.translate()`](#Context.translate). In other words, the translation of the
 user-space origin takes place after any existing transformation.
 
-<a name="Context.scale">
+<a name="Context.scale"></a>
 #### Context.scale()
 
 Modifies the current transformation matrix (CTM) by scaling the X
@@ -1044,7 +1044,7 @@ and Y user-space axes by `sx` and `sy` respectively. The scaling of
 the axes takes place after any existing transformation of user
 space.
 
-<a name="Context.rotate">
+<a name="Context.rotate"></a>
 #### Context.rotate()
 
 Modifies the current transformation matrix (CTM) by rotating the
@@ -1053,25 +1053,25 @@ places after any existing transformation of user space. The
 rotation direction for positive angles is from the positive X axis
 toward the positive Y axis.
 
-<a name="Context.transform">
+<a name="Context.transform"></a>
 #### Context.transform()
 
 Modifies the current transformation matrix (CTM) by applying
 `matrix` as an additional transformation. The new transformation of
 user space takes place after any existing transformation.
 
-<a name="Context.setMatrix">
+<a name="Context.setMatrix"></a>
 #### Context.setMatrix()
 
 Modifies the current transformation matrix (CTM) by setting it
 equal to `matrix`.
 
-<a name="Context.getMatrix">
+<a name="Context.getMatrix"></a>
 #### Context.getMatrix()
 
 Stores the current transformation matrix (CTM) into `matrix`.
 
-<a name="Context.identityMatrix">
+<a name="Context.identityMatrix"></a>
 #### Context.identityMatrix()
 
 Resets the current transformation matrix (CTM) by setting it equal
@@ -1079,14 +1079,14 @@ to the identity matrix. That is, the user-space and device-space
 axes will be aligned and one user-space unit will transform to one
 device-space unit.
 
-<a name="Context.userToDevice">
+<a name="Context.userToDevice"></a>
 #### Context.userToDevice()
 
 Transform a coordinate from user space to device space by
 multiplying the given point by the current transformation matrix
 (CTM).
 
-<a name="Context.userToDeviceDistance">
+<a name="Context.userToDeviceDistance"></a>
 #### Context.userToDeviceDistance()
 
 Transform a distance vector from user space to device space. This
@@ -1094,14 +1094,14 @@ function is similar to [`Context.userToDevice()`](#Context.userToDevice) except 
 translation components of the CTM will be ignored when transforming
 (`dx`,`dy`).
 
-<a name="Context.deviceToUser">
+<a name="Context.deviceToUser"></a>
 #### Context.deviceToUser()
 
 Transform a coordinate from device space to user space by
 multiplying the given point by the inverse of the current
 transformation matrix (CTM).
 
-<a name="Context.deviceToUserDistance">
+<a name="Context.deviceToUserDistance"></a>
 #### Context.deviceToUserDistance()
 
 Transform a distance vector from device space to user space. This
@@ -1112,7 +1112,7 @@ transforming (`dx`,`dy`).
 
 ### Rendering text and glyphs
 
-<a name="Context.selectFontFace">
+<a name="Context.selectFontFace"></a>
 #### Context.selectFontFace()
 
 Note: The [`Context.selectFontFace()`](#Context.selectFontFace) function call is part of what
@@ -1159,7 +1159,7 @@ Default slant is [`"normal"`](enums.md#FontSlant), and default weight is
 This function is equivalent to a call to [`Context.toyFontFaceCreate()`](#Context.toyFontFaceCreate)
 followed by [`Context.setFontFace()`](#Context.setFontFace).
 
-<a name="Context.setFontSize">
+<a name="Context.setFontSize"></a>
 #### Context.setFontSize()
 
 Sets the current font matrix to a scale by a factor of `size`, replacing
@@ -1172,7 +1172,7 @@ If text is drawn without a call to [`Context.setFontSize()`](#Context.setFontSiz
 [`Context.setFontMatrix()`](#Context.setFontMatrix) nor [`Context.setScaledFont()`](#Context.setScaledFont)), the default
 font size is 10.0.
 
-<a name="Context.setFontMatrix">
+<a name="Context.setFontMatrix"></a>
 #### Context.setFontMatrix()
 
 Sets the current font matrix to `matrix`. The font matrix gives a
@@ -1182,13 +1182,13 @@ simple scale is used (see [`Context.setFontSize()`](#Context.setFontSize)), but 
 complex font matrix can be used to shear the font
 or stretch it unequally along the two axes
 
-<a name="Context.getFontMatrix">
+<a name="Context.getFontMatrix"></a>
 #### Context.getFontMatrix()
 
 Stores the current font matrix into `matrix`. See
 [`Context.setFontMatrix()`](#Context.setFontMatrix).
 
-<a name="Context.setFontOptions">
+<a name="Context.setFontOptions"></a>
 #### Context.setFontOptions()
 
 Sets a set of custom font rendering options for the [`Context`](#Context).
@@ -1197,7 +1197,7 @@ options derived from underlying surface; if the value in `options`
 has a default value (like [`"default"`](enums.md#Antialias)), then the value
 from the surface is used.
 
-<a name="Context.getFontOptions">
+<a name="Context.getFontOptions"></a>
 #### Context.getFontOptions()
 
 Retrieves font rendering options set via [`cairo_set_font_options`](#cairo_set_font_options).
@@ -1205,14 +1205,14 @@ Note that the returned options do not include any options derived
 from the underlying surface; they are literally the options
 passed to [`Context.setFontOptions()`](#Context.setFontOptions).
 
-<a name="Context.setFontFace">
+<a name="Context.setFontFace"></a>
 #### Context.setFontFace()
 
 Replaces the current [`FontFace`](fontface.md#FontFace) object in the [`Context`](#Context) with
 `font_face`. The replaced font face in the [`Context`](#Context) will be
 destroyed if there are no other references to it.
 
-<a name="Context.getFontFace">
+<a name="Context.getFontFace"></a>
 #### Context.getFontFace()
 
 Gets the current font face for a [`Context`](#Context).
@@ -1229,7 +1229,7 @@ objects it is passed to, (for example, calling
 [`Context.setFontFace()`](#Context.setFontFace) with a nil font will trigger an error that
 will shutdown the [`Context`](#Context) object).
 
-<a name="Context.setScaledFont">
+<a name="Context.setScaledFont"></a>
 #### Context.setScaledFont()
 
 Replaces the current font face, font matrix, and font options in
@@ -1238,7 +1238,7 @@ some translation, the current CTM of the [`Context`](#Context) should be the
 same as that of the [`ScaledFontFace`](fontface.md#ScaledFontFace), which can be accessed
 using [`ScaledFontFace.getCtm()`](fontface.md#ScaledFontFace.getCtm).
 
-<a name="Context.getScaledFont">
+<a name="Context.getScaledFont"></a>
 #### Context.getScaledFont()
 
 Gets the current scaled font for a [`Context`](#Context).
@@ -1255,7 +1255,7 @@ objects it is passed to, (for example, calling
 [`Context.setScaledFont()`](#Context.setScaledFont) with a nil font will trigger an error that
 will shutdown the [`Context`](#Context) object).
 
-<a name="Context.showText">
+<a name="Context.showText"></a>
 #### Context.showText()
 
 A drawing operator that generates the shape from a string of UTF-8
@@ -1280,14 +1280,14 @@ and simple programs, but it is not expected to be adequate for
 serious text-using applications. See [`Context.showGlyphs()`](#Context.showGlyphs) for the
 "real" text display API in cairo.
 
-<a name="Context.showGlyphs">
+<a name="Context.showGlyphs"></a>
 #### Context.showGlyphs()
 
 A drawing operator that generates the shape from an array of glyphs,
 rendered according to the current font face, font size
 (font matrix), and font options.
 
-<a name="Context.showTextGlyphs">
+<a name="Context.showTextGlyphs"></a>
 #### Context.showTextGlyphs()
 
 This operation has rendering effects similar to [`Context.showGlyphs()`](#Context.showGlyphs)
@@ -1311,12 +1311,12 @@ following clusters move backward.
 
 See [`cairo_text_cluster_t`](#cairo_text_cluster_t) for constraints on valid clusters.
 
-<a name="Context.fontExtents">
+<a name="Context.fontExtents"></a>
 #### Context.fontExtents()
 
 Gets the font extents for the currently selected font.
 
-<a name="Context.textExtents">
+<a name="Context.textExtents"></a>
 #### Context.textExtents()
 
 Gets the extents for a string of text. The extents describe a
@@ -1332,7 +1332,7 @@ characters. In particular, trailing whitespace characters are
 likely to not affect the size of the rectangle, though they will
 affect the x_advance and y_advance values.
 
-<a name="Context.glyphExtents">
+<a name="Context.glyphExtents"></a>
 #### Context.glyphExtents()
 
 Gets the extents for an array of glyphs. The extents describe a
@@ -1344,5 +1344,4 @@ amount by which the current point would be advanced by
 
 Note that whitespace glyphs do not contribute to the size of the
 rectangle (extents.width and extents.height).
-
 
